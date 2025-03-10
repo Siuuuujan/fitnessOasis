@@ -1,0 +1,134 @@
+/* Resetting some default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body and General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    background-color: #f8f9fa;
+}
+
+/* Navigation Bar */
+.nav-bar {
+    width: 100%;
+    background-color: #343a40;
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 20px;
+    align-items: center;
+}
+
+.logo img {
+    width: 120px; /* Adjust logo size */
+}
+
+.navbar-contents a {
+    text-decoration: none;
+    color: white;
+    margin: 0 15px;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.navbar-contents a:hover {
+    color: #007bff; /* Blue hover color */
+}
+
+.navbar-contents input[type="button"] {
+    background-color: #294f77;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.navbar-contents input[type="button"]:hover {
+    background-color: #0056b3;
+}
+
+/* FAQ Section Styles */
+#faq {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+h2 {
+    text-align: center;
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+/* Accordion Styles */
+.accordion-item {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.accordion-header {
+    padding: 15px;
+}
+
+.accordion-button {
+    background-color: #f8f9fa;
+    color: #343a40;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    text-align: left;
+    width: 100%;
+    padding: 15px;
+    transition: background-color 0.3s ease;
+}
+
+.accordion-button:hover {
+    background-color: #e9ecef;
+}
+
+.accordion-button:focus {
+    box-shadow: none;
+}
+
+.accordion-body {
+    background-color: #f1f1f1;
+    padding: 20px;
+    font-size: 1rem;
+    color: #555;
+    border-top: 1px solid #ddd;
+}
+
+footer {
+    background-color: #343a40;
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+    margin-top: 30px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .nav-bar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .navbar-contents {
+        display: block;
+        margin-top: 20px;
+    }
+    .navbar-contents a {
+        display: block;
+        margin: 10px 0;
+    }
+}

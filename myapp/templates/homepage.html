@@ -1,0 +1,83 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness Oasis</title>
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+</head>
+<body>
+    <img src="{% static 'images/gym-background.jpg' %}" id="background-img">
+    <div class="main">
+        <div class="nav-bar">
+            <div class="logo">
+                <img src="{% static 'images/logo.png' %}" alt="">
+            </div>
+            <div class="navbar-contents">
+                <a href="{% url 'homepage' %}">Home</a>
+                <a href="{% url 'about' %}">About</a>
+                <a href="{% url 'contact' %}">Contact</a>
+                <a href="{% url 'faqs' %}">FAQs</a>
+                <a href="{% url 'testimonials' %}">Testimonals</a>
+                <a href="{% url 'login' %}"></a>   
+                {% if user.is_authenticated %}
+                    <a href="{% url 'profile' %}">
+                        <div class="profile"></div>
+                    </a>
+                {% else %}
+                <a href="{% url 'login' %}">
+                    <input type="button" class="login-btn" value="Log In">
+                </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="hero">Welcome to your BEST SELF!!!<br>
+                <p>At Fitness Oasis, we believe that fitness is a journey, not a destination. Our membership offers you all the tools, support, and motivation you need to build strength, endurance, and confidence. Whether you're here to tone up, lose weight, or push your limits, we've got you covered.</p></div>
+            <div class="three-content">
+                <div class="our-services" id="servicesBtn">
+                    <img src="{% static 'images/services.jpg' %}" alt="">
+                    <h1>Services</h1>
+                </div>
+                <div class="our-trainers" id="trainersBtn">
+                    <img src="{% static 'images/trainers.jpg' %}" alt="">
+                    <h1>Trainers</h1>
+                </div>
+                <div class="our-timetable" id="timetableBtn">
+                    <img src="{% static 'images/timetable.jpg' %}" alt="">
+                    <h1>Timetable</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <p class="text-center">&copy; 2025 Fitness Oasis. All Rights Reserved.</p>
+    </footer>
+
+    <script src="{% static 'js/homepage.js' %}"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const servicesBtn = document.getElementById("servicesBtn");
+    
+            servicesBtn.addEventListener("click", function() {
+                window.location.href = "{% url 'services' %}"; 
+            });
+
+            const trainersBtn = document.getElementById("trainersBtn");
+    
+            trainersBtn.addEventListener("click", function() {
+                window.location.href = "#"; 
+            });
+
+            const timetableBtn = document.getElementById("timetableBtn");
+    
+            timetableBtn.addEventListener("click", function() {
+                window.location.href = "#"; 
+            });
+        });
+    </script>
+    
+</body>
+</html>

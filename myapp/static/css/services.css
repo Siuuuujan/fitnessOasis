@@ -1,0 +1,90 @@
+/* General reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        /* Our Services Section */
+        .services-section {
+            background-image: url('{% static "images/background.jpg" %}'); /* Add a background image */
+            background-size: cover;
+            background-position: center;
+            padding: 80px 0;
+            color: #fff;
+        }
+
+        .carousel-inner img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+        }
+
+        .service-card {
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.6);
+            color: #fff;
+            border-radius: 10px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .service-card h3 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .service-card p {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .service-card button {
+            background-color: #ff5722; /* Attractive orange color */
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 30px;
+            transition: background-color 0.3s ease;
+        }
+
+        .service-card button:hover {
+            background-color: #ff3d00; /* Darker shade on hover */
+        }
+
+        .carousel-caption {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 500px;
+        }
+
+        /* Media Query for smaller devices */
+        @media (max-width: 768px) {
+            .service-card h3 {
+                font-size: 28px;
+            }
+
+            .service-card p {
+                font-size: 16px;
+            }
+
+            .service-card button {
+                font-size: 16px;
+                padding: 10px 20px;
+            }
+        }

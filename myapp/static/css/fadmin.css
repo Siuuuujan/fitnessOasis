@@ -1,0 +1,177 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Navbar Styling */
+.navbar {
+    background: linear-gradient(135deg, #2c3e50, #34495e);
+    color: white;
+    padding: 20px;
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    border-bottom: 3px solid #007bff;
+    text-transform: uppercase;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.navbar:hover {
+    background: linear-gradient(135deg, #34495e, #2c3e50);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Main Container */
+.main-container {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* Sidebar Styling */
+.sidebar {
+    width: 250px;
+    background: #2c3e50;
+    padding: 20px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    box-shadow: 2px 0 6px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar button {
+    width: 100%;
+    padding: 15px;
+    margin: 10px 0;
+    background: #34495e;
+    color: white;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.sidebar button:hover {
+    background: #2980b9;
+}
+
+.sidebar a {
+    text-decoration: none;
+}
+
+.sidebar button:active {
+    background: #1c5d7d;
+}
+
+/* Main Content Area */
+.content {
+    flex: 1;
+    padding: 30px;
+    overflow-x: auto;
+    overflow-y: auto;
+    background-color: #ecf0f1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Card Styling */
+.card {
+    display: none; /* Initially hidden */
+    background: white;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    max-height: 80vh; /* Prevent content from being too tall */
+}
+
+.card h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.card p {
+    font-size: 18px;
+    color: #666;
+}
+
+.card form {
+    display: flex;
+    flex-direction: column;
+}
+
+.card form input[type="text"],
+.card form input[type="time"],
+.card form select,
+.card form textarea {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.card form button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.card form button:hover {
+    background-color: #0056b3;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .navbar {
+        font-size: 20px;
+        padding: 15px;
+    }
+
+    .sidebar {
+        width: 200px;
+    }
+
+    .sidebar button {
+        font-size: 14px;
+    }
+
+    .content {
+        padding: 20px;
+    }
+}
+
+/* Scrollable Content Area */
+.content {
+    overflow: auto; /* Enables scrolling */
+    max-width: 100%;
+    max-height: 90vh; /* Restricts height of the content */
+}
+
+/* Adjustments for Form Elements */
+.card form input[type="checkbox"] {
+    margin-right: 10px;
+}

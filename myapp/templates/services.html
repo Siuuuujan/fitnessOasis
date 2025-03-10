@@ -1,0 +1,212 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Services</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/services.css' %}">
+    <style>
+        /* General reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+    
+        /* Body styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('{% static "images/gym-background.jpg" %}'); /* Add a background image */
+            background-size: cover;
+            background-position: center;
+        }
+    
+        /* Our Services Section */
+        .services-section {
+            padding: 80px 0;
+            color: #fff;
+        }
+    
+        .carousel-inner img {
+            width: 100%;
+            height: 425px;
+            object-fit: cover;
+        }
+    
+        .service-card {
+            text-align: center;
+            padding: 20px;
+            height: 55%;
+            background-color: rgba(0, 0, 0, 0.6);
+            color: #fff;
+            border-radius: 10px;
+            transition: transform 0.3s ease-in-out;
+        }
+    
+        .service-card h3 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+    
+        .service-card p {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+    
+        .service-card button {
+            background-color: #ff5722; /* Attractive orange color */
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 30px;
+            transition: background-color 0.3s ease;
+        }
+    
+        .service-card button:hover {
+            background-color: #ff3d00; /* Darker shade on hover */
+        }
+    
+        .carousel-caption {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 500px;
+        }
+    
+        /* Carousel Controls Styling */
+        .carousel-control-prev, .carousel-control-next {
+            color: #fff;
+            font-size: 30px;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+            padding: 10px;
+        }
+    
+        .carousel-control-prev:hover, .carousel-control-next:hover {
+            background-color: rgba(0, 0, 0, 0.8); /* Darker on hover */
+        }
+    
+        .carousel-control-prev-icon, .carousel-control-next-icon {
+            filter: invert(100%);
+        }
+    
+        /* Media Query for smaller devices */
+        @media (max-width: 768px) {
+            .service-card h3 {
+                font-size: 28px;
+            }
+    
+            .service-card p {
+                font-size: 16px;
+            }
+    
+            .service-card button {
+                font-size: 16px;
+                padding: 10px 20px;
+            }
+        }
+    </style>
+    
+</head>
+<body>
+
+    <!-- Our Services Section -->
+    <div class="container services-section">
+        <h2 class="text-center mb-5">Our Services</h2>
+
+        <!-- Slider -->
+        <div id="servicesSlider" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <!-- Gym Slide -->
+                <div class="carousel-item active">
+                    <img src="{% static 'images/gym.jpg' %}" class="d-block w-100" alt="Gym">
+                    <div class="carousel-caption d-none d-md-block service-card">
+                        <h3>Gym</h3>
+                        <p>Get stronger and healthier with our fully equipped gym.</p>
+                        <button onclick="window.location.href='{% url 'book' %}'">Join Now</button>
+                    </div>
+                </div>
+
+                <!-- Martial Arts Slide -->
+                <div class="carousel-item">
+                    <img src="{% static 'images/martial-arts.jpg' %}" class="d-block w-100" alt="Martial Arts">
+                    <div class="carousel-caption d-none d-md-block service-card">
+                        <h3>Martial Arts</h3>
+                        <p>Master self-defense techniques and build discipline through martial arts.</p>
+                        <button onclick="window.location.href='#join'">Join Now</button>
+                    </div>
+                </div>
+
+                <!-- Yoga Slide -->
+                <div class="carousel-item">
+                    <img src="{% static 'images/yoga.jpg' %}" class="d-block w-100" alt="Yoga">
+                    <div class="carousel-caption d-none d-md-block service-card">
+                        <h3>Yoga</h3>
+                        <p>Relax, rejuvenate, and build flexibility with our calming yoga sessions.</p>
+                        <button onclick="window.location.href='#join'">Join Now</button>
+                    </div>
+                </div>
+
+                <!-- CrossFit Slide -->
+                <div class="carousel-item">
+                    <img src="{% static 'images/crossfit.jpg' %}" class="d-block w-100" alt="CrossFit">
+                    <div class="carousel-caption d-none d-md-block service-card">
+                        <h3>CrossFit</h3>
+                        <p>Push your limits with intense CrossFit training sessions.</p>
+                        <button onclick="window.location.href='#join'">Join Now</button>
+                    </div>
+                </div>
+
+                <!-- Zumba Slide -->
+                <div class="carousel-item">
+                    <img src="{% static 'images/zumba.jpg' %}" class="d-block w-100" alt="Zumba">
+                    <div class="carousel-caption d-none d-md-block service-card">
+                        <h3>Zumba</h3>
+                        <p>Dance your way to fitness with high-energy Zumba classes.</p>
+                        <button onclick="window.location.href='#join'">Join Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Carousel Controls -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#servicesSlider" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#servicesSlider" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Bootstrap JavaScript and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('service').addEventListener('change', function() {
+            const serviceId = this.value;
+            fetch(`/get_trainers/${serviceId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    const trainerSelect = document.getElementById('trainer');
+                    trainerSelect.innerHTML = '<option value="">Choose a Trainer</option>';
+                    data.forEach(trainer => {
+                        const option = document.createElement('option');
+                        option.value = trainer.id;
+                        option.textContent = trainer.name;
+                        trainerSelect.appendChild(option);
+                    });
+                });
+        });
+    </script>
+</body>
+</html>

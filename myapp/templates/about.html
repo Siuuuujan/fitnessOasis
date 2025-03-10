@@ -1,0 +1,83 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Fitness Oasis</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/about.css' %}">
+</head>
+<body>
+    <img src="{% static 'images/gym-background.jpg' %}" id="background-img">
+
+    <div class="nav-bar">
+            <div class="logo">
+                <img src="{% static 'images/logo.png' %}" alt="">
+            </div>
+            <div class="navbar-contents">
+                <a href="{% url 'homepage' %}">Home</a>
+                <a href="{% url 'about' %}">About</a>
+                <a href="{% url 'contact' %}">Contact</a>
+                <a href="{% url 'faqs' %}">FAQs</a>
+                <a href="{% url 'testimonials' %}">Testimonals</a>
+                <a href="{% url 'login' %}"></a>   
+                {% if user.is_authenticated %}
+                    <a href="{% url 'profile' %}">
+                        <div class="profile"></div>
+                    </a>
+                {% else %}
+                <a href="{% url 'login' %}">
+                    <input type="button" class="login-btn" value="Log In">
+                </a>
+                {% endif %}
+            </div>
+        </div>
+
+    <div class="about-container">
+        <h1>About Us</h1>
+        <p>Welcome to **Fitness Oasis**, your ultimate fitness destination. Our mission is to help you achieve your fitness goals and live a healthier lifestyle. With a team of expert trainers, state-of-the-art facilities, and a supportive community, we provide personalized programs tailored to your needs. Whether you're just starting your fitness journey or looking to elevate your training, Fitness Oasis is the perfect place for you. We are dedicated to providing a welcoming and motivating environment that helps you thrive.</p>
+
+        <h2>Our Story</h2>
+        <p>Fitness Oasis was founded with the goal of providing a welcoming environment where everyone, no matter their fitness level, can thrive. We believe in the power of consistency and hard work, and we are here to support you every step of the way. Over the years, we have expanded our offerings to include a variety of fitness programs that cater to all types of fitness enthusiasts, from beginners to seasoned athletes. Our passion for fitness has made us one of the leading gyms in the region. As our community has grown, so has our commitment to offering new and exciting ways for our members to stay motivated and achieve their goals.</p>
+
+        <h2>Our Vision</h2>
+        <p>Our vision is to create a fitness community that prioritizes health, well-being, and a positive environment. At Fitness Oasis, we don’t just offer equipment and classes—we offer a supportive network of like-minded individuals who motivate and inspire one another. Our members come from all walks of life, and we take pride in creating an inclusive space for everyone to achieve their fitness potential. We strive to empower our members not just physically, but mentally, giving them the confidence to take on any challenge. We hope to inspire a lifelong love of fitness and health in each and every one of our members.</p>
+
+        <h2>Our Values</h2>
+        <ul>
+            <li><strong>Commitment:</strong> We are committed to helping you reach your fitness goals and live a balanced life. We believe in the long-term success of our members and will be with you every step of the way, no matter how challenging the journey may be. Our trainers are dedicated to providing the guidance and support you need to achieve your full potential.</li>
+            <li><strong>Community:</strong> We believe that a strong community is essential for success. We encourage members to support and challenge each other along their fitness journey. At Fitness Oasis, you'll find a group of people who are ready to cheer you on, share advice, and celebrate your victories with you, making your fitness journey even more rewarding.</li>
+            <li><strong>Personalization:</strong> Every individual is unique, and we work with you to design a personalized fitness program that fits your specific goals and needs. We understand that no two fitness journeys are the same, and that’s why we focus on providing customized plans that align with your lifestyle, fitness level, and aspirations. Our programs are designed to adapt to your progress and challenges, ensuring you stay on track to achieve your goals.</li>
+            <li><strong>Innovation:</strong> We embrace new trends in fitness and continuously update our facilities and programs to ensure you have access to the best tools available. Whether it's the latest workout equipment, fitness apps, or advanced training techniques, we are always looking for ways to enhance your experience and keep things exciting. Our commitment to innovation ensures that you always have the opportunity to explore new ways to reach your fitness goals.</li>
+        </ul>
+
+        <h2>Our Commitment to Wellness</h2>
+        <p>At Fitness Oasis, wellness extends beyond physical fitness. We care about our members’ mental and emotional well-being. Our goal is to create a space where you can not only improve your body but also build a strong mind. Our trainers and staff are passionate about supporting each individual’s journey, helping them overcome challenges, and celebrating victories—big or small. Our holistic approach is what sets us apart from other gyms, and we believe it’s essential for long-term success. We encourage our members to focus on self-care and mental health as part of their overall wellness journey.</p>
+
+        <h2>Why Choose Us?</h2>
+        <p>Choosing Fitness Oasis means choosing a place where you are valued and supported. Our experienced trainers, diverse class offerings, and state-of-the-art equipment are all here to help you succeed. Whether you’re looking to get stronger, improve your endurance, or achieve specific fitness goals, we have the resources and expertise to guide you. With a wide range of programs—from strength training to wellness and mindfulness—we provide something for everyone. Here’s why you should make Fitness Oasis your fitness home:</p>
+        <ul style="text-align: center;">
+            <li>1. Expert trainers with years of experience in diverse fitness disciplines.</li>
+            <li>2. State-of-the-art gym equipment and facilities that cater to all types of training.</li>
+            <li>3. Personalized programs designed for your individual goals, progress, and challenges.</li>
+            <li>4. A supportive and motivating community that helps you stay on track and reach your full potential.</li>
+            <li>5. Flexible class schedules and a variety of fitness options that accommodate your lifestyle.</li>
+        </ul>
+
+        <h2>Our Facility</h2>
+        <p>Our gym features a variety of top-notch equipment, from cardio machines to free weights, resistance training, and more. We also offer specialized areas for functional training, group fitness classes, and wellness practices. Additionally, our spa-like amenities—such as saunas and steam rooms—provide the perfect way to relax after an intense workout. Fitness Oasis is not just a gym; it’s a sanctuary where you can grow stronger, both physically and mentally. Our goal is to provide a complete wellness experience that goes beyond traditional fitness training, offering relaxation and recovery options that complement your workout routine.</p>
+
+        <h2>Join Us Today</h2>
+        <p>Fitness Oasis is more than just a gym—it’s a lifestyle. We invite you to become part of our family and start your fitness journey with us today. Whether you want to lose weight, build muscle, improve your flexibility, or simply live a healthier life, we are here to help you achieve your goals. Contact us now to schedule a tour of our facility or to inquire about membership options. Let’s get started and make your fitness dreams a reality!</p>
+
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Fitness Oasis. All Rights Reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

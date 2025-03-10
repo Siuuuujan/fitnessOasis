@@ -1,0 +1,126 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/fadmin.css' %}">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        Welcome to Admin Dashboard
+    </div>
+
+    <div class="main-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <button onclick="showCard('bookings')">Total Bookings</button>
+            <button onclick="showCard('services')">Add Services</button>
+            <button onclick="showCard('trainers')">Add Trainers</button>
+            <button onclick="showCard('slots_month')">Training Slots (Month)</button>
+            <button onclick="showCard('slots_week')">Training Slots (Week)</button>
+            <button onclick="showCard('members')">Total Enrolled Members</button>
+            <a href="{% url 'admin_logout' %}">
+                <button>Logout</button>
+            </a>
+        </div>
+
+            <!-- Main Content -->
+            <div class="content">
+                <div id="bookings" class="card">
+                    <h2>Total Bookings</h2>
+                    <p>{{ total_bookings }}</p>
+                </div>
+
+                <div id="services" class="card">
+                    <h2>Add a New Service</h2>
+                
+                    <form method="POST">
+                        {% csrf_token %}
+                        
+                        <label for="service-name">Service Name</label>
+                        <input type="text" name="service-name" id="service-name" required><br>
+                
+                        <button type="submit" name="add_service">Add Service</button>
+                    </form>
+                </div>               
+
+                <!-- fadmin.html -->
+                <div id="trainers" class="card">
+                    <h2>Available Trainers</h2>
+                    <p>{{ available_trainers }}</p>
+
+                    <h3>Add a New Trainer</h3>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div>
+                            <label for="trainer-name">Trainer Name</label>
+                            <input type="text" id="trainer-name" name="trainer-name" required>
+                        </div>
+                    
+                        <div>
+                            <label for="service">Service</label>
+                            <select id="service" name="service" required>
+                                {% for service in services %}
+                                    <option value="{{ service.id }}">{{ service.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    
+                        <div>
+                            <label for="experience">Experience</label>
+                            <input type="text" id="experience" name="experience" required>
+                        </div>
+
+                        <div>
+                            <label for="daily_rate">Daily Rate</label>
+                            <input type="text" id="daily_rate" name="daily_rate" required>
+                        </div>
+
+                        <h3>Assign Availability</h3><br>
+                        <div>
+                            <label for="morning">Morning (6 AM - 12 PM)</label>
+                            <input type="checkbox" id="morning" name="time_slots" value="morning"><br>
+                            
+                            <label for="afternoon">Afternoon (12 PM - 5 PM)</label>
+                            <input type="checkbox" id="afternoon" name="time_slots" value="afternoon"><br>
+                            
+                            <label for="evening">Evening (5 PM - 9 PM)</label>
+                            <input type="checkbox" id="evening" name="time_slots" value="evening"><br>
+                        </div><br>
+
+                        <button type="submit" name="add_trainer">Add Trainer</button>
+                    </form>
+                </div>
+
+                <div id="slots_month" class="card"> 
+                    <h2>Training Slots Sold (Month)</h2>
+                    <p>{{ slots_per_month }}</p>
+                </div>
+
+                <div id="slots_week" class="card">
+                    <h2>Training Slots Sold (Week)</h2>
+                    <p>{{ slots_per_week }}</p>
+                </div>
+
+                <div id="members" class="card">
+                    <h2>Total Enrolled Members</h2>
+                    <p>{{ total_members }}</p>
+                </div>
+        </div>
+    </div>
+
+    <script>
+        function showCard(cardId) {
+            // Hide all cards
+            var cards = document.querySelectorAll('.card');
+            cards.forEach(card => card.style.display = 'none');
+
+            // Show the selected card
+            document.getElementById(cardId).style.display = 'block';
+        }
+    </script>
+
+</body>
+</html>

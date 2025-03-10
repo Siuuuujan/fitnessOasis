@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Service</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container mt-5">
+    <h2>Book a Service</h2>
+    <form method="POST">
+      {% csrf_token %}
+      
+      <!-- Service Selection -->
+      <div class="mb-3">
+        <label for="service" class="form-label">Select Service</label>
+        <select class="form-select" name="service" id="service" required>
+          <option value="">Choose a Service</option>
+          {% for service in services %}
+            <option value="{{ service.id }}">{{ service.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      
+      <!-- Trainer Selection (Dynamically updated) -->
+      <div class="mb-3">
+        <label for="trainer" class="form-label">Select Trainer</label>
+        <select class="form-select" name="trainer" id="trainer" required>
+          <option value="">Choose a Trainer</option>
+        </select>
+      </div>
+      
+      <!-- Package Selection (Static) -->
+      <div class="mb-3">
+        <label for="package" class="form-label">Select Package Duration</label>
+        <select class="form-select" name="package" id="package" required>
+          <option value="">Choose Package Duration</option>
+          <option value="1" data-duration="30">1 Month</option>
+          <option value="3" data-duration="90">3 Months</option>
+          <option value="6" data-duration="180">6 Months</option>
+          <option value="12" data-duration="360">12 Months</option>
+        </select>
+      </div>
+      
+      <!-- Start Date -->
+      <div class="mb-3">
+        <label for="start_date" class="form-label">Start Date</label>
+        <input type="date" class="form-control" id="start_date" name="start_date" required>
+      </div>
+      
+      <!-- End Date (Calculated automatically) -->
+      <div class="mb-3">
+        <label for="end_date" class="form-label">End Date</label>
+        <input type="date" class="form-control" id="end_date" name="end_date" readonly>
+      </div>
+      
+      <button type="submit" class="btn btn-primary">Book Now</button>
+    </form>
+  </div>
+  
+  <script>
+    const serviceSelect = document.getElementById('service');
+    const trainerSelect = document.getElementById('trainer');
+    const packageSelect = document.getElementById('package');
+    const startDateInput = document.getElementById('start_date');
+    const endDateInput = document.getElementById('end_date');
+    
+    serviceSelect.addEventListener('change', function() {
+      const serviceId = this.value;
+      if (serviceId) {
+        // Fetch trainers for the selected service
+        fetch(`/get_trainers/${serviceId}/`)
+          .then(response => response.json())
+          .then(data => {
+            trainerSelect.innerHTML = '<option value="">Select Trainer</option>';
+            data.trainers.forEach(trainer => {
+              const option = document.createElement('option');
+              option.value = trainer.id;
+              // Join available time slots, if available
+              let timeslots = trainer.available_time_slots && trainer.available_time_slots.length 
+                                ? trainer.available_time_slots.join(', ') 
+                                : 'No slots';
+              option.textContent = `${trainer.name} (${timeslots})`;
+              trainerSelect.appendChild(option);
+            });
+            
+            // Populate package dropdown only if needed.
+            // If packages are fetched dynamically, add code here.
+          })
+          .catch(error => console.error('Error fetching trainers:', error));
+      } else {
+        trainerSelect.innerHTML = '<option value="">Select Trainer</option>';
+      }
+    });
+    
+    function updateEndDate() {
+      const selectedOption = packageSelect.selectedOptions[0];
+      const packageDuration = selectedOption ? selectedOption.getAttribute('data-duration') : null;
+      const startDate = new Date(startDateInput.value);
+      if (startDate && packageDuration) {
+        const endDate = new Date(startDate);
+        endDate.setDate(endDate.getDate() + parseInt(packageDuration));
+        endDateInput.value = endDate.toISOString().split('T')[0];
+      } else {
+        endDateInput.value = '';
+      }
+    }
+    
+    packageSelect.addEventListener('change', updateEndDate);
+    startDateInput.addEventListener('input', updateEndDate);
+  </script>
+</body>
+</html>

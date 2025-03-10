@@ -1,0 +1,84 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testimonials | Fitness Oasis</title>
+    <link rel="stylesheet" href="{% static 'css/testimonials.css' %}">
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <div class="nav-bar">
+        <div class="logo">
+            <img src="{% static 'images/logo.png' %}" alt="">
+        </div>
+        <div class="navbar-contents">
+            <a href="{% url 'homepage' %}">Home</a>
+                <a href="{% url 'about' %}">About</a>
+                <a href="{% url 'contact' %}">Contact</a>
+                <a href="{% url 'faqs' %}">FAQs</a>
+                <a href="{% url 'testimonials' %}">Testimonals</a>
+                <a href="{% url 'login' %}"></a>   
+                {% if user.is_authenticated %}
+                    <a href="{% url 'profile' %}">
+                        <div class="profile"></div>
+                    </a>
+                {% else %}
+                <a href="{% url 'login' %}">
+                    <input type="button" class="login-btn" value="Log In">
+                </a>
+                {% endif %}
+        </div>
+    </div>
+
+    <!-- Testimonials Section -->
+    <div class="container my-5">
+        <h2 class="text-center mb-4">What Our Members Say</h2>
+        <div class="row">
+
+            <!-- Testimonial 1 -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card shadow-sm">
+                    <img src="{% static 'images/john.jpg' %}" class="card-img-top" alt="Member Photo">
+                    <div class="card-body">
+                        <h5 class="card-title">John Doe</h5>
+                        <p class="card-text">"Fitness Oasis helped me transform my body and mind. The trainers are professional, and the gym is always clean and motivating!"</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Testimonial 2 -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card shadow-sm">
+                    <img src="{% static 'images/sarah.jpg' %}" class="card-img-top" alt="Member Photo">
+                    <div class="card-body">
+                        <h5 class="card-title">Jane Smith</h5>
+                        <p class="card-text">"I never thought I'd be able to stick to a fitness routine, but Fitness Oasis made it fun! Highly recommend their personal training sessions!"</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Testimonial 3 -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card shadow-sm">
+                    <img src="{% static 'images/sarah.jpg' %}" class="card-img-top" alt="Member Photo">
+                    <div class="card-body">
+                        <h5 class="card-title">Sarah Lee</h5>
+                        <p class="card-text">"The community at Fitness Oasis is so supportive! It’s not just a gym, it’s a place where you feel like part of a family."</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Footer (optional) -->
+    <footer>
+        <p class="text-center">&copy; 2025 Fitness Oasis. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>

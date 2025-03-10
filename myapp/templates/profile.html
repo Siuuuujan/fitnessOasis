@@ -1,0 +1,116 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="profile-header">
+                <a href="{% url 'homepage' %}">
+                    <img src="{% static 'images/logo.png' %}" id="logo-img" alt="Logo">
+                </a>
+                <img src="{% if profile.profile_picture %}{{ profile.profile_picture.url }}{% else %}{% static 'images/default-profile.png' %}{% endif %}" 
+                     class="profile-pic" alt="Profile Picture">
+                <h3>{{ user.first_name }} {{ user.last_name }}</h3>
+                <p>{{ user.email }}</p>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#security">🔒 Security & Customization</a></li>
+                    <li><a href="#preferences">⚙️ Preferences</a></li>
+                </ul>
+                <form action="{% url 'logout' %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-btn">🚪 Log Out</button>
+                </form>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <section id="security">
+                <h2>🔒 Security & Customization</h2>
+                <p>Update your password, profile picture, and personal settings.</p>
+                <form action="{% url 'profile' %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <!-- Profile Picture Upload -->
+                    <label for="profile_picture">Profile Picture:</label>
+                    <input type="file" name="profile_picture" accept="image/*"><br>
+
+                    <label for="current_password">Current Password:</label>
+                    <input type="password" name="current_password" required><br>
+
+                    <label for="new_password">New Password:</label>
+                    <input type="password" name="new_password"><br>
+
+                    <label for="confirm_password">Confirm New Password:</label>
+                    <input type="password" name="confirm_password"><br>
+
+                    <button type="submit" name="update_security">Save Changes</button>
+                </form>
+            </section>
+
+            <section id="preferences">
+                <h2>⚙️ Preferences</h2>
+                <p>Set your fitness goals and personalize your experience.</p>
+                <form action="{% url 'profile' %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <label for="goals">Your Fitness Goals:</label>
+                    <textarea name="goals">{{ profile.goals }}</textarea><br>
+
+                    <label for="age">Age:</label>
+                    <input type="number" name="age" value="{{ profile.age }}"><br>
+
+                    <label for="height">Height (cm):</label>
+                    <input type="number" name="height" value="{{ profile.height }}"><br>
+
+                    <label for="weight">Weight (kg):</label>
+                    <input type="number" step="0.1" name="weight" value="{{ profile.weight }}"><br>
+
+                    <!-- Fix Gender Dropdown Values -->
+                    <label for="gender">Gender:</label>
+                    <select name="gender">
+                        <option value="Male" {% if profile.gender == "Male" %}selected{% endif %}>Male</option>
+                        <option value="Female" {% if profile.gender == "Female" %}selected{% endif %}>Female</option>
+                        <option value="Other" {% if profile.gender == "Other" %}selected{% endif %}>Other</option>
+                    </select><br>
+
+                    <button type="submit" name="update_profile">Save Preferences</button>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const sections = document.querySelectorAll("main section");
+            const links = document.querySelectorAll(".sidebar nav ul li a");
+
+            // Function to show the selected section
+            function showSection(sectionId) {
+                sections.forEach(section => {
+                    section.style.display = section.id === sectionId ? "block" : "none";
+                });
+            }
+
+            // Add event listeners to navigation links
+            links.forEach(link => {
+                link.addEventListener("click", function(event) {
+                    event.preventDefault();
+                    const sectionId = this.getAttribute("href").substring(1);  // Get section ID
+                    showSection(sectionId);
+                });
+            });
+
+            // Show only the first section on page load
+            showSection("security");
+        });
+    </script>
+</body>
+</html>

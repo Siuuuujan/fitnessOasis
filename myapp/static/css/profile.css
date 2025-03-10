@@ -1,0 +1,109 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.dashboard-container {
+    display: flex;
+    height: 100vh;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #333;
+    color: white;
+    padding: 20px;
+}
+
+.profile-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#logo-img {
+    width:120px;
+    object-fit: contain;
+}
+
+.profile-pic {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    margin: 10px 0;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+nav ul li a:hover {
+    background-color: #555;
+}
+
+.logout-btn {
+    background-color: #d9534f;
+    padding: 10px;
+    text-align: center;
+    display: block;
+    margin-top: 20px;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.logout-btn:hover {
+    background-color: #c9302c;
+}
+
+.content {
+    flex: 1;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    margin: 20px;
+}
+
+h2 {
+    color: #333;
+}
+
+form {
+    margin-top: 10px;
+}
+
+input, textarea, select, button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #218838;
+}
