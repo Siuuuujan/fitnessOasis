@@ -106,6 +106,13 @@
         endDateInput.value = '';
       }
     }
+
+    let today = new Date();
+    today.setDate(today.getDate() + 1);  // Add one day to today's date
+    let formattedDate = today.toISOString().split('T')[0];  // Convert to YYYY-MM-DD format
+
+    // Set the min attribute of the start_date input to the day after today
+    document.getElementById('start_date').setAttribute('min', formattedDate);
     
     packageSelect.addEventListener('change', updateEndDate);
     startDateInput.addEventListener('input', updateEndDate);

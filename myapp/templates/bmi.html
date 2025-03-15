@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMI Calculator</title>
+</head>
+<style>
+    body {
+    font-family: 'Arial', sans-serif;
+    background-color: #e0f7fa; /* Light blue background */
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 40px;
+    color: #01579b; /* Deep blue */
+    font-weight: 700;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 40px 20px;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.profile-info {
+    margin-bottom: 30px;
+}
+
+.profile-info h2 {
+    font-size: 28px;
+    color: #00796b; /* Deep green color */
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-info p {
+    font-size: 18px;
+    line-height: 1.8;
+    margin: 10px 0;
+}
+
+.profile-info p strong {
+    color: #00796b; /* Matching green */
+    font-weight: 600;
+}
+
+h3 {
+    color: #00796b;
+    font-size: 24px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+form label {
+    font-size: 18px;
+    margin-bottom: 5px;
+    color: #00796b;
+}
+
+form input {
+    padding: 12px;
+    font-size: 16px;
+    margin-bottom: 15px;
+    width: 80%;
+    max-width: 400px;
+    border-radius: 8px;
+    border: 2px solid #00796b;
+    background-color: #f1f1f1;
+}
+
+form button {
+    background-color: #00796b;
+    color: white;
+    padding: 12px 30px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+form button:hover {
+    background-color: #004d40; /* Darker green */
+}
+
+.result {
+    background-color: #f0f4f4;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.result p {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    margin: 10px 0;
+}
+
+.result p strong {
+    color: #00796b;
+}
+
+/* Media Queries for Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 32px;
+    }
+
+    h2 {
+        font-size: 24px;
+    }
+
+    h3 {
+        font-size: 20px;
+    }
+
+    form input,
+    form button {
+        width: 100%;
+    }
+
+    .result {
+        padding: 15px;
+    }
+}
+</style>
+<body>
+
+    <h1>BMI Calculator</h1>
+
+    <div class="container">
+        <div class="profile-info">
+            <h2>Profile Information</h2>
+            <p><strong>Name:</strong> {{ profile.user.first_name }} {{ profile.user.last_name }}</p>
+            <p><strong>Height:</strong> {{ profile.height }} cm</p>
+            <p><strong>Weight:</strong> {{ profile.weight }} kg</p>
+            <p><strong>Gender:</strong> {{ profile.gender }}</p>
+
+            <h2>Calculate Your BMI and Ideal Weight</h2>
+
+            <form method="post">
+                {% csrf_token %}
+                <label for="weight">Weight (kg):</label>
+                <input type="text" id="weight" name="weight" required><br><br>
+                <label for="height">Height (cm):</label>
+                <input type="text" id="height" name="height" required><br><br>
+                <button type="submit">Calculate</button>
+            </form>
+
+        </div>
+
+        {% if bmi %}
+        <div class="result">
+            <h3>Results</h3>
+            <p><strong>Your BMI:</strong> {{ bmi|floatformat:2 }}</p>
+            <p><strong>Classification:</strong> {{ classification }}</p>
+            <p><strong>Ideal Weight (BMI 22):</strong> {{ ideal_weight|floatformat:2 }} kg</p>
+        </div>
+        {% endif %}
+        
+    </div>
+
+</body>
+</html>

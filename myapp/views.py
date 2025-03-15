@@ -8,9 +8,215 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import update_session_auth_hash
 from django.views.decorators.cache import never_cache
 from datetime import datetime, timedelta
+from django.core.exceptions import ValidationError
+import requests\
+
+
+
+def generate_meal_plan(profile):
+    if profile:
+        if profile.fitness_goal == 'Weight Loss':
+            return "Low-calorie, high-protein meal plans with lean meats, vegetables, and complex carbs to help you shed pounds while maintaining energy."
+        elif profile.fitness_goal == 'Weight Gain':
+            return "High-calorie meal plans packed with protein, healthy fats, and complex carbs to promote muscle growth and healthy weight gain."
+        elif profile.fitness_goal == 'Self Defense':
+            return "Balanced meal plans focused on agility, endurance, and strength. Includes lean proteins, healthy fats, and energy-boosting carbs."
+        elif profile.fitness_goal == 'Strength':
+            return "Power-building meal plans with high-protein foods, complex carbs, and healthy fats to enhance muscle growth and recovery."
+        else:
+            return "Well-balanced meal plans to support overall health and fitness."
+    return "General meal plans to get you started."
+
+def generate_workout_plan(profile):
+    if profile:
+        if profile.fitness_goal == 'Weight Loss':
+            if profile.fitness_level == 'Novice':
+                return "Beginner weight loss workout plans with moderate cardio and bodyweight exercises."
+            elif profile.fitness_level == 'Amateur':
+                return "Intermediate weight loss workout routines with HIIT and strength training."
+            elif profile.fitness_level == 'Expert':
+                return "Advanced weight loss routines focused on high-intensity interval training (HIIT) and strength training."
+            else:
+                return "General weight loss workout plans focused on cardio and strength training."
+        
+        elif profile.fitness_goal == 'Weight Gain':
+            if profile.fitness_level == 'Novice':
+                return "Beginner weight gain workout plans with compound movements and basic strength exercises."
+            elif profile.fitness_level == 'Amateur':
+                return "Intermediate weight gain workout routines with a mix of compound lifts and hypertrophy-focused exercises."
+            elif profile.fitness_level == 'Expert':
+                return "Advanced weight gain routines focused on strength training and progressive overload."
+            else:
+                return "General weight gain workout plans with a mix of compound lifts and high-rep exercises."
+        
+        elif profile.fitness_goal == 'Self Defense':
+            if profile.fitness_level == 'Novice':
+                return "Beginner self-defense workout plans with basic martial arts and core exercises."
+            elif profile.fitness_level == 'Amateur':
+                return "Intermediate self-defense workout routines with martial arts drills, bodyweight exercises, and agility work."
+            elif profile.fitness_level == 'Expert':
+                return "Advanced self-defense routines with martial arts sparring, strength, and conditioning."
+            else:
+                return "General self-defense workout plans with martial arts and strength-based training."
+        
+        elif profile.fitness_goal == 'Strength':
+            if profile.fitness_level == 'Novice':
+                return "Beginner strength workout plans with compound lifts and full-body workouts."
+            elif profile.fitness_level == 'Amateur':
+                return "Intermediate strength routines focused on progressive overload and major muscle groups."
+            elif profile.fitness_level == 'Expert':
+                return "Advanced strength routines with heavy lifting, powerlifting, and strength specialization."
+            else:
+                return "General strength workout plans with a focus on muscle growth and progressive overload."
+        
+        else:
+            return "General workout plans for various fitness goals and levels."
+    return "General workout plans for beginners."
+
+def generate_hydration_plan(profile):
+    if profile and profile.weight:
+        water_intake = profile.weight * 0.033  # Calculate daily water intake based on weight (in liters)
+        return f"Stay hydrated! Your daily water intake: {water_intake:.2f} liters."
+    return "Please update your profile with your weight to get a personalized hydration plan."
+
+from django.shortcuts import render
+from .models import Profile
 
 def homepage(request):
-    return render(request, 'homepage.html')
+    # Get the user's profile if authenticated
+    profile = Profile.objects.get(user=request.user) if request.user.is_authenticated else None
+
+    # Check if the profile exists and has the necessary data for meal/workout/hydration plans
+    if profile:
+        meal_plan = generate_meal_plan(profile)
+        workout_plan = generate_workout_plan(profile)
+        hydration_plan = generate_hydration_plan(profile)
+    else:
+        meal_plan = None
+        workout_plan = None
+        hydration_plan = None
+    
+    # Pass these plans to the template
+    return render(request, 'homepage.html', {
+        'profile': profile,
+        'meal_plan': meal_plan,
+        'workout_plan': workout_plan,
+        'hydration_plan': hydration_plan,
+    })
+
+API_KEY = "6769c288e7784defaf9cd89214732996"
+
+def fetch_full_meal_plan(profile):
+    """Fetch a detailed meal plan from Spoonacular API based on user profile."""
+    if not profile:
+        return {"error": "Please complete your profile to get a personalized meal plan."}
+
+    fitness_goal_calories = {
+        "Weight Loss": 1800,
+        "Weight Gain": 3000,
+        "Self Defense": 2500,
+        "Strength": 2800
+    }
+    
+    target_calories = fitness_goal_calories.get(profile.fitness_goal, 2200)
+
+    # Fetch meal plan from Spoonacular API
+    api_url = f"https://api.spoonacular.com/mealplanner/generate?timeFrame=day&targetCalories={target_calories}&apiKey={API_KEY}"
+    
+    response = requests.get(api_url)
+    
+    if response.status_code == 200:
+        return response.json()  # Returns full meal plan as JSON
+    else:
+        return {"error": "Failed to fetch meal plan from Spoonacular."}
+
+def meal_plan_detail(request):
+    """Renders meal plan details page."""
+    profile = Profile.objects.get(user=request.user) if request.user.is_authenticated else None
+    meal_plan = fetch_full_meal_plan(profile) if profile else None
+    
+    return render(request, 'meal_plan.html', {'meal_plan': meal_plan})
+
+import requests
+
+import json
+import os
+
+def fetch_workout_plan(profile):
+    if profile:
+        goal = profile.fitness_goal  # e.g., "Weight Loss", "Weight Gain"
+        level = profile.fitness_level  # e.g., "Novice", "Amateur", "Expert"
+
+        # Load workout plans from the JSON file
+        json_path = os.path.join(os.path.dirname(__file__), 'static', 'workout_plans.json')
+
+        try:
+            with open(json_path, 'r') as file:
+                workout_plans = json.load(file)
+        except FileNotFoundError:
+            return {"error": "Workout plans file not found."}
+        except json.JSONDecodeError:
+            return {"error": "Error decoding JSON file."}
+
+        # Retrieve the specific workout plan
+        if goal in workout_plans and level in workout_plans[goal]:
+            return workout_plans[goal][level]
+        else:
+            return workout_plans["Default"]  # Return a general plan if not found
+
+    return {"error": "Please complete your profile."}
+
+    
+from django.shortcuts import render
+from .models import Profile
+
+def workout_plan_detail(request):
+    profile = Profile.objects.get(user=request.user) if request.user.is_authenticated else None
+    print(f"Profile Found: {profile}")  # Debugging
+
+    if profile:
+        workout_plan = fetch_workout_plan(profile)
+        print(f"Generated Plan: {workout_plan}")  # Debugging
+    else:
+        workout_plan = {"error": "No workout plan available."}
+
+    return render(request, 'workout_plan.html', {'workout_plan': workout_plan})
+
+
+def hydration_plan_detail(request):
+    # Get the user's profile if authenticated
+    profile = Profile.objects.get(user=request.user) if request.user.is_authenticated else None
+
+    # Fetch full hydration plan for the authenticated user
+    if profile:
+        hydration_plan = generate_hydration_plan(profile)
+    else:
+        hydration_plan = None
+
+    return render(request, 'hydration_plan.html', {'hydration_plan': hydration_plan})
+
+
+# View for the homepage
+def homepage(request):
+    profile = Profile.objects.get(user=request.user) if request.user.is_authenticated else None
+    
+    if profile:
+        # Generate dynamic recommendations based on the user's profile
+        meal_plan = generate_meal_plan(profile)
+        workout_plan = generate_workout_plan(profile)
+        hydration_plan = generate_hydration_plan(profile)
+    else:
+        # Provide default messages if the profile is empty
+        meal_plan = "Please complete your profile to get personalized meal plans."
+        workout_plan = "Please complete your profile to get personalized workout plans."
+        hydration_plan = "Please complete your profile to get personalized hydration plans."
+    
+    return render(request, 'homepage.html', {
+        'profile': profile,
+        'meal_plan': meal_plan,
+        'workout_plan': workout_plan,
+        'hydration_plan': hydration_plan,
+    })
 
 def faqs(request):
     return render(request, 'faqs.html')
@@ -83,18 +289,36 @@ def profile(request):
             profile.weight = request.POST.get('weight', profile.weight)
             profile.gender = request.POST.get('gender', profile.gender)
             profile.goals = request.POST.get('goals', profile.goals)
+            
+            # Handling new fitness goal and fitness level
+            profile.fitness_goal = request.POST.get('fitness_goal', profile.fitness_goal)
+            profile.fitness_level = request.POST.get('fitness_level', profile.fitness_level)
+            
             if request.FILES.get('profile_picture'):
                 profile.profile_picture = request.FILES.get('profile_picture')
+                
+            # Validate the data
             if profile.age and profile.height and profile.weight:
                 try:
                     profile.age = int(profile.age)
                     profile.height = float(profile.height)
                     profile.weight = float(profile.weight)
+
                     if profile.age <= 0 or profile.height <= 0 or profile.weight <= 0:
                         raise ValueError("Age, height, and weight must be positive values.")
+                    
                     valid_genders = ["Male", "Female", "Other"]
                     if profile.gender not in valid_genders:
                         raise ValueError("Invalid gender selected.")
+
+                    valid_fitness_goals = ["Weight Gain", "Weight Loss", "Self Defense", "Strength"]
+                    if profile.fitness_goal not in valid_fitness_goals:
+                        raise ValueError("Invalid fitness goal selected.")
+                    
+                    valid_fitness_levels = ["Novice", "Amateur", "Expert"]
+                    if profile.fitness_level not in valid_fitness_levels:
+                        raise ValueError("Invalid fitness level selected.")
+                    
                     profile.save()
                     messages.success(request, "Profile updated successfully!")
                 except ValueError as e:
@@ -103,6 +327,7 @@ def profile(request):
                     messages.error(request, f"Error: {e}")
             else:
                 messages.error(request, "Please fill in all required fields.")
+                
         elif 'update_security' in request.POST:
             current_password = request.POST.get('current_password')
             new_password = request.POST.get('new_password')
@@ -117,7 +342,9 @@ def profile(request):
             request.user.save()
             update_session_auth_hash(request, request.user)
             messages.success(request, "Password updated successfully!")
+        
         return redirect('profile')
+
     return render(request, 'profile.html', {'profile': profile})
 
 def logout_view(request):
@@ -166,6 +393,56 @@ def book(request):
         return render(request, 'booking_confirmation.html', {'booking': booking})
     
     return render(request, 'book.html', {'services': services, 'trainers': trainers})
+
+def trainers(request):
+    trainers = Trainer.objects.all()
+    return render(request, 'trainers.html', {'trainers': trainers})
+
+@login_required
+def bmi(request):
+    profile = request.user.profile
+    bmi = None
+    classification = None
+    ideal_weight = None
+
+    if request.method == 'POST':
+        # Get the data from the POST request (without updating the profile)
+        weight = request.POST.get('weight')
+        height = request.POST.get('height')
+
+        try:
+            # Validate and calculate BMI if weight and height are provided
+            if weight and height:
+                weight = float(weight)
+                height = float(height)
+
+                # Calculate BMI
+                height_in_meters = height / 100  # Convert height to meters
+                bmi = weight / (height_in_meters ** 2)
+
+                # Classify BMI
+                if bmi < 18.5:
+                    classification = "Underweight"
+                elif 18.5 <= bmi < 24.9:
+                    classification = "Normal weight"
+                elif 25 <= bmi < 29.9:
+                    classification = "Overweight"
+                else:
+                    classification = "Obese"
+
+                # Calculate ideal weight (for BMI = 22)
+                ideal_weight = 22 * (height_in_meters ** 2)
+
+        except ValueError:
+            # Handle invalid weight or height input
+            pass
+
+    return render(request, 'bmi.html', {
+        'profile': profile,
+        'bmi': bmi,
+        'classification': classification,
+        'ideal_weight': ideal_weight
+    })
 
 
 def get_trainers(request, service_id):

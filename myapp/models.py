@@ -7,6 +7,10 @@ def profile_picture_path(instance, filename):
     """Generate a file path for a new profile picture."""
     return f'profile_pics/{instance.user.username}/{filename}'
 
+from django.db import models
+from datetime import date
+import os
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     profile_picture = models.ImageField(upload_to=profile_picture_path, null=True, blank=True)
@@ -18,6 +22,33 @@ class Profile(models.Model):
     gender = models.CharField(
         max_length=10,
         choices=[('Male', 'Male'), ('Female', 'Female'), ('Other', 'Other')],
+        null=True,
+        blank=True
+    )
+
+    # Fitness goal choices
+    FITNESS_GOAL_CHOICES = [
+        ('Weight Gain', 'Weight Gain'),
+        ('Weight Loss', 'Weight Loss'),
+        ('Self Defense', 'Self Defense'),
+        ('Strength', 'Strength'),
+    ]
+    fitness_goal = models.CharField(
+        max_length=20,
+        choices=FITNESS_GOAL_CHOICES,
+        null=True,
+        blank=True
+    )
+
+    # Fitness level choices
+    FITNESS_LEVEL_CHOICES = [
+        ('Novice', 'Novice'),
+        ('Amateur', 'Amateur'),
+        ('Expert', 'Expert'),
+    ]
+    fitness_level = models.CharField(
+        max_length=10,
+        choices=FITNESS_LEVEL_CHOICES,
         null=True,
         blank=True
     )
@@ -42,6 +73,7 @@ class Profile(models.Model):
 
     def __str__(self):
         return f'{self.user.username} Profile'
+
 
 class Service(models.Model):
     name = models.CharField(max_length=100, unique=True)

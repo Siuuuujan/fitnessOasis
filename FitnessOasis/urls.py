@@ -22,8 +22,11 @@ urlpatterns = [
     path('admin_logout', admin_logout, name='admin_logout'),
     path('services', services, name='services'),
     path('book', book, name='book'),
-    path('get_trainers/<int:service_id>/',get_trainers, name='get_trainers')
-
+    path('get_trainers/<int:service_id>/',get_trainers, name='get_trainers'),
+    path('trainers', trainers, name="trainers"),
+    path('bmi', bmi, name='bmi'),
+    path('meal-plan/', meal_plan_detail, name='meal_plan_detail'),
+    path('workout-plan/', workout_plan_detail, name='workout_plan_detail'),
 
 ]
 if settings.DEBUG:

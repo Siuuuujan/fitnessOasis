@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Trainers</title>
+    <style>
+        /* General Body Styles */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #e0f7fa; /* Light blue background */
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        /* Header Styling */
+        h1 {
+            text-align: center;
+            margin: 40px 0;
+            font-size: 40px;
+            color: #01579b; /* Deep blue */
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        /* Container for Trainers */
+        .trainers-container {
+            padding: 30px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Grid Layout for Trainers List (Single Column) */
+        .trainers-list {
+            display: flex;
+            flex-direction: column; /* Single column layout */
+            gap: 30px;
+        }
+
+        /* Trainer Card Styling */
+        .trainer-card {
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Hover effect on trainer card */
+        .trainer-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Trainer Name Styling - Centered and Underlined */
+        .trainer-card h3 {
+            font-size: 26px;
+            color: #0277bd; /* Darker blue */
+            margin-bottom: 15px;
+            text-align: center; /* Center the text */
+            text-decoration: underline; /* Underline the name */
+            font-weight: 700; /* Make it bold */
+        }
+
+        /* Text Styling for Trainer Info */
+        .trainer-card p {
+            font-size: 18px;
+            color: #333;
+            margin: 8px 0;
+        }
+
+        /* Strong Text (Labels) */
+        .trainer-card p strong {
+            color: #0288d1; /* Light blue accent */
+            font-weight: 600;
+        }
+
+        /* "No Trainers" message */
+        .trainers-list p {
+            font-size: 20px;
+            color: #ff5722; /* Warm color for no trainers message */
+            text-align: center;
+        }
+
+        /* Button Styling */
+        .trainer-card button {
+            background-color: #0288d1;
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 6px;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Button Hover Effect */
+        .trainer-card button:hover {
+            background-color: #0277bd;
+        }
+
+        /* Responsive Design for Smaller Screens */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 32px;
+            }
+
+            .trainer-card {
+                padding: 20px;
+            }
+
+            .trainers-list {
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="trainers-container">
+        <h1>Meet Our Trainers</h1>
+
+        <div class="trainers-list">
+            {% for trainer in trainers %}
+                <div class="trainer-card">
+                    <h3>{{ trainer.name }}</h3>
+                    <p><strong>Service:</strong> {{ trainer.service.name }}</p>
+                    <p><strong>Experience:</strong> {{ trainer.experience }}</p>
+                    <p><strong>Available Time Slots:</strong> 
+                        {% for time_slot in trainer.available_time_slots %}
+                            {{ time_slot }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                    <p><strong>Daily Rate:</strong> ${{ trainer.daily_rate }}</p>
+                </div>
+            {% empty %}
+                <p>No trainers available at the moment.</p>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

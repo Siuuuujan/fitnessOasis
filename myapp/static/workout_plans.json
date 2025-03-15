@@ -1,0 +1,125 @@
+{
+    "Weight Loss": {
+        "Novice": {
+            "title": "Beginner Weight Loss Plan",
+            "description": "A moderate cardio and bodyweight workout to help with fat loss.",
+            "workouts": [
+                {"day": "Monday", "exercises": ["Jump Rope - 5 min", "Squats - 3x12", "Push-ups - 3x10", "Plank - 30 sec"]},
+                {"day": "Wednesday", "exercises": ["Jogging - 10 min", "Lunges - 3x10", "Burpees - 3x8", "Russian Twists - 3x15"]},
+                {"day": "Friday", "exercises": ["Jumping Jacks - 3x30", "Deadlifts (light) - 3x10", "Mountain Climbers - 3x12", "Sit-ups - 3x15"]}
+            ]
+        },
+        "Amateur": {
+            "title": "Intermediate Weight Loss Plan",
+            "description": "Incorporates HIIT and strength training for faster results.",
+            "workouts": [
+                {"day": "Monday", "exercises": ["Treadmill Sprint - 5 min", "Jump Squats - 3x12", "Kettlebell Swings - 3x10", "Plank - 40 sec"]},
+                {"day": "Wednesday", "exercises": ["Rowing - 10 min", "Step-ups - 3x10", "Jump Rope - 3x2 min", "Bicycle Crunches - 3x15"]},
+                {"day": "Friday", "exercises": ["Battle Ropes - 3x30 sec", "Dumbbell Deadlifts - 3x10", "Box Jumps - 3x10", "Side Plank - 3x15 sec"]}
+            ]
+        },
+        "Expert": {
+            "title": "Advanced Weight Loss Plan",
+            "description": "High-intensity workouts focusing on fat burning and endurance.",
+            "workouts": [
+                {"day": "Monday", "exercises": ["Sled Push - 3x30m", "Box Jumps - 3x12", "Kettlebell Swings - 3x12", "Plank - 1 min"]},
+                {"day": "Tuesday", "exercises": ["Battle Ropes - 3x30 sec", "Burpees - 3x12", "Weighted Lunges - 3x12", "Hanging Leg Raises - 3x15"]},
+                {"day": "Wednesday", "exercises": ["Treadmill HIIT - 20 min", "Deadlifts - 4x8", "Sprints - 5x40m", "Medicine Ball Slams - 3x12"]},
+                {"day": "Friday", "exercises": ["Sled Push - 4x30m", "Box Jumps - 4x12", "Kettlebell Swings - 4x12", "Plank - 1 min"]},
+                {"day": "Saturday", "exercises": ["Battle Ropes - 3x30 sec", "Burpees - 4x12", "Weighted Lunges - 4x12", "Hanging Leg Raises - 4x15"]}
+            ]
+        }
+    },
+    "Weight Gain": {
+        "Novice": {
+            "title": "Beginner Weight Gain Plan",
+            "description": "Focus on compound movements and basic strength exercises.",
+            "workouts": [
+                {"day": "Monday", "exercises": ["Squats - 3x10", "Bench Press - 3x8", "Deadlifts - 3x8", "Pull-ups - 3x5"]},
+                {"day": "Wednesday", "exercises": ["Overhead Press - 3x8", "Rows - 3x10", "Lunges - 3x10", "Dips - 3x8"]},
+                {"day": "Friday", "exercises": ["Deadlifts - 3x8", "Incline Bench Press - 3x8", "Leg Press - 3x10", "Face Pulls - 3x12"]}
+            ]
+        },
+        "Amateur": {
+            "title": "Intermediate Weight Gain Plan",
+            "description": "Focus on hypertrophy and progressive overload.",
+            "workouts": [
+                {"day": "Monday", "exercises": ["Squats - 4x10", "Barbell Bench Press - 4x8", "Romanian Deadlifts - 4x8", "Pull-ups - 3x6"]},
+                {"day": "Wednesday", "exercises": ["Overhead Press - 4x8", "Lat Pulldowns - 3x10", "Bulgarian Split Squats - 3x8", "Tricep Dips - 3x8"]},
+                {"day": "Friday", "exercises": ["Deadlifts - 4x6", "Incline Dumbbell Press - 4x8", "Leg Press - 4x10", "Face Pulls - 4x12"]}
+            ]
+        },
+        "Expert": {
+            "title": "Advanced Weight Gain Plan",
+            "description": "Powerlifting and strength-based hypertrophy for muscle growth.",
+            "workouts": [
+                {"day": "Monday", "exercises": ["Deadlifts - 5x5", "Bench Press - 5x5", "Pull-ups - 4x6", "Dips - 4x8"]},
+                {"day": "Tuesday", "exercises": ["Squats - 5x5", "Barbell Rows - 4x6", "Barbell Lunges - 4x8", "Overhead Press - 4x6"]},
+                {"day": "Wednesday", "exercises": ["Squats - 5x5", "Incline Barbell Press - 4x6", "Romanian Deadlifts - 4x6", "Face Pulls - 4x12"]},
+                {"day": "Thursday", "exercises": ["Deadlifts - 5x5", "Bench Press - 5x5", "Pull-ups - 5x6", "Dips - 5x8"]},
+                {"day": "Friday", "exercises": ["Squats - 5x5", "Barbell Rows - 4x6", "Barbell Lunges - 4x8", "Overhead Press - 4x6"]}
+            ]
+        }
+    },
+    "Self Defense": {
+        "Novice": {
+            "title": "Beginner Self-Defense Plan",
+            "description": "Learn the fundamentals of martial arts with core strength training.",
+            "workouts": [
+                {"day": "Monday", "exercises": ["Shadow Boxing - 5 min", "Push-ups - 3x10", "Squats - 3x15", "Jump Rope - 5 min"]},
+                {"day": "Wednesday", "exercises": ["Basic Kicks - 3x10 each leg", "Burpees - 3x10", "Sit-ups - 3x15", "Plank - 40 sec"]},
+                {"day": "Friday", "exercises": ["Bag Work - 3x2 min", "Bodyweight Lunges - 3x10", "Jumping Jacks - 3x30", "Hanging Leg Raises - 3x10"]}
+            ]
+        },
+        "Amateur": {
+            "title": "Intermediate Self-Defense Plan",
+            "description": "Increase intensity and focus on combat technique.",
+            "workouts": [
+                {"day": "Monday", "exercises": ["Shadow Boxing - 6 min", "Push-ups - 4x12", "Squats - 3x20", "Jump Rope - 5 min"]},
+                {"day": "Wednesday", "exercises": ["Advanced Kicks - 4x12 each leg", "Burpees - 4x12", "Sit-ups - 3x20", "Plank - 1 min"]},
+                {"day": "Friday", "exercises": ["Bag Work - 4x2 min", "Lunges with kicks - 3x15", "Jumping Jacks - 4x30", "Hanging Leg Raises - 4x12"]}
+            ]
+        },
+        "Expert": {
+            "title": "Advanced Self-Defense Plan",
+            "description": "Incorporate sparring, complex drills, and conditioning.",
+            "workouts": [
+                {"day": "Monday", "exercises": ["Shadow Boxing - 10 min", "Push-ups - 5x15", "Squats - 4x25", "Jump Rope - 7 min"]},
+                {"day": "Tuesday", "exercises": ["Power Kicks - 5x15 each leg", "Burpees - 5x15", "Sit-ups - 5x25", "Plank - 1 min 30 sec"]},
+                {"day": "Wednesday", "exercises": ["Sparring - 5x2 min", "Boxing Drills - 5x3 min", "Jumping Jacks - 5x30", "Leg Raises - 5x15"]},
+                {"day": "Friday", "exercises": ["Shadow Boxing - 10 min", "Push-ups - 5x20", "Squats - 4x30", "Jump Rope - 8 min"]}
+            ]
+        }
+    },
+    "Strength": {
+        "Novice": {
+            "title": "Beginner Strength Plan",
+            "description": "Full-body workouts with a focus on progressive overload.",
+            "workouts": [
+                {"day": "Monday", "exercises": ["Deadlifts - 3x8", "Pull-ups - 3x5", "Overhead Press - 3x8", "Plank - 30 sec"]},
+                {"day": "Wednesday", "exercises": ["Squats - 3x10", "Rows - 3x10", "Lunges - 3x10", "Push-ups - 3x15"]},
+                {"day": "Friday", "exercises": ["Bench Press - 3x8", "Face Pulls - 3x12", "Deadlifts - 3x8", "Side Plank - 3x15 sec"]}
+            ]
+        },
+        "Amateur": {
+            "title": "Intermediate Strength Plan",
+            "description": "Increase intensity with higher weights and more complex lifts.",
+            "workouts": [
+                {"day": "Monday", "exercises": ["Deadlifts - 4x8", "Pull-ups - 4x6", "Overhead Press - 4x8", "Plank - 45 sec"]},
+                {"day": "Wednesday", "exercises": ["Squats - 4x10", "Rows - 4x10", "Lunges - 4x12", "Push-ups - 4x20"]},
+                {"day": "Friday", "exercises": ["Bench Press - 4x8", "Face Pulls - 4x12", "Deadlifts - 4x6", "Side Plank - 4x20 sec"]}
+            ]
+        },
+        "Expert": {
+            "title": "Advanced Strength Plan",
+            "description": "Focus on heavy lifting and advanced techniques for maximal strength.",
+            "workouts": [
+                {"day": "Monday", "exercises": ["Deadlifts - 5x5", "Pull-ups - 5x5", "Overhead Press - 5x5", "Plank - 1 min"]},
+                {"day": "Tuesday", "exercises": ["Squats - 5x5", "Rows - 5x5", "Lunges - 5x5", "Push-ups - 5x25"]},
+                {"day": "Wednesday", "exercises": ["Bench Press - 5x5", "Face Pulls - 5x15", "Deadlifts - 5x5", "Side Plank - 5x30 sec"]},
+                {"day": "Thursday", "exercises": ["Deadlifts - 5x5", "Pull-ups - 5x6", "Overhead Press - 5x5", "Plank - 1 min"]},
+                {"day": "Friday", "exercises": ["Squats - 5x5", "Rows - 5x5", "Lunges - 5x5", "Push-ups - 5x30"]}
+            ]
+        }
+    }
+}

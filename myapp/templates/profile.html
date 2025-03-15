@@ -38,10 +38,6 @@
                 <form action="{% url 'profile' %}" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     
-                    <!-- Profile Picture Upload -->
-                    <label for="profile_picture">Profile Picture:</label>
-                    <input type="file" name="profile_picture" accept="image/*"><br>
-
                     <label for="current_password">Current Password:</label>
                     <input type="password" name="current_password" required><br>
 
@@ -61,8 +57,24 @@
                 <form action="{% url 'profile' %}" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
 
-                    <label for="goals">Your Fitness Goals:</label>
-                    <textarea name="goals">{{ profile.goals }}</textarea><br>
+                    <label for="profile_picture">Profile Picture:</label>
+                    <input type="file" name="profile_picture" accept="image/*"><br>
+
+
+                    <label for="fitness_goal">Select Your Fitness Goal:</label>
+                    <select name="fitness_goal">
+                        <option value="Weight Gain" {% if profile.fitness_goal == "Weight Gain" %}selected{% endif %}>Weight Gain</option>
+                        <option value="Weight Loss" {% if profile.fitness_goal == "Weight Loss" %}selected{% endif %}>Weight Loss</option>
+                        <option value="Self Defense" {% if profile.fitness_goal == "Self Defense" %}selected{% endif %}>Self Defense</option>
+                        <option value="Strength" {% if profile.fitness_goal == "Strength" %}selected{% endif %}>Strength</option>
+                    </select><br>
+
+                    <label for="fitness_level">Select Your Fitness Level:</label>
+                    <select name="fitness_level">
+                        <option value="Novice" {% if profile.fitness_level == "Novice" %}selected{% endif %}>Novice</option>
+                        <option value="Amateur" {% if profile.fitness_level == "Amateur" %}selected{% endif %}>Amateur</option>
+                        <option value="Expert" {% if profile.fitness_level == "Expert" %}selected{% endif %}>Expert</option>
+                    </select><br>
 
                     <label for="age">Age:</label>
                     <input type="number" name="age" value="{{ profile.age }}"><br>
