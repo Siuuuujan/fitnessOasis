@@ -8,122 +8,52 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/services.css' %}">
     <style>
-        /* General reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        /* Previous styles remain unchanged */
+        /* Add carousel specific fixes */
+        .carousel-item {
+            transition: transform 0.6s ease-in-out;
         }
-    
-        /* Body styling */
-        body {
-            font-family: Arial, sans-serif;
-            background-image: url('{% static "images/gym-background.jpg" %}'); /* Add a background image */
-            background-size: cover;
-            background-position: center;
+        .carousel-control-prev,
+        .carousel-control-next {
+            width: 5%;
         }
-    
-        /* Our Services Section */
-        .services-section {
-            padding: 80px 0;
-            color: #fff;
-        }
-    
-        .carousel-inner img {
-            width: 100%;
-            height: 425px;
-            object-fit: cover;
-        }
-    
-        .service-card {
-            text-align: center;
-            padding: 20px;
-            height: 55%;
-            background-color: rgba(0, 0, 0, 0.6);
-            color: #fff;
-            border-radius: 10px;
-            transition: transform 0.3s ease-in-out;
-        }
-    
-        .service-card h3 {
-            font-size: 32px;
-            margin-bottom: 10px;
-        }
-    
-        .service-card p {
-            font-size: 18px;
-            margin-bottom: 20px;
-        }
-    
-        .service-card button {
-            background-color: #ff5722; /* Attractive orange color */
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            font-size: 18px;
-            cursor: pointer;
-            border-radius: 30px;
-            transition: background-color 0.3s ease;
-        }
-    
-        .service-card button:hover {
-            background-color: #ff3d00; /* Darker shade on hover */
-        }
-    
-        .carousel-caption {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 20px;
-            border-radius: 10px;
-            width: 80%;
-            max-width: 500px;
-        }
-    
-        /* Carousel Controls Styling */
-        .carousel-control-prev, .carousel-control-next {
-            color: #fff;
-            font-size: 30px;
-            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-            padding: 10px;
-        }
-    
-        .carousel-control-prev:hover, .carousel-control-next:hover {
-            background-color: rgba(0, 0, 0, 0.8); /* Darker on hover */
-        }
-    
-        .carousel-control-prev-icon, .carousel-control-next-icon {
-            filter: invert(100%);
-        }
-    
-        /* Media Query for smaller devices */
-        @media (max-width: 768px) {
-            .service-card h3 {
-                font-size: 28px;
-            }
-    
-            .service-card p {
-                font-size: 16px;
-            }
-    
-            .service-card button {
-                font-size: 16px;
-                padding: 10px 20px;
-            }
+        .carousel-indicators [data-bs-target] {
+            background-color: #fff;
         }
     </style>
-    
 </head>
 <body>
+    <!-- Navigation Bar (unchanged) -->
+    <div class="nav-bar">
+        <div class="logo">
+            <img src="{% static 'images/logo.png' %}" alt="">
+        </div>
+        <div class="navbar-contents">
+            <a href="{% url 'homepage' %}">Home</a>
+            <a href="{% url 'about' %}">About</a>
+            <a href="{% url 'contact' %}">Contact</a>
+            <a href="{% url 'faqs' %}">FAQs</a>
+            <a href="{% url 'testimonials' %}">Testimonals</a>
+            <a href="{% url 'login' %}"></a>   
+            {% if user.is_authenticated %}
+                <a href="{% url 'profile' %}">
+                    <div class="profile">
+                        <img src="{% if profile.profile_picture %}{{ profile.profile_picture.url }}{% else %}{% static 'images/default-profile.png' %}{% endif %}" class="profile-pic" alt="Profile Picture">
+                    </div>
+                </a>
+            {% else %}
+                <a href="{% url 'login' %}">
+                    <input type="button" class="login-btn" value="Log In">
+                </a>
+            {% endif %}
+        </div>
+    </div>
 
     <!-- Our Services Section -->
     <div class="container services-section">
         <h2 class="text-center mb-5">Our Services</h2>
 
-        <!-- Slider -->
+        <!-- Carousel Fixes -->
         <div id="servicesSlider" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
                 <!-- Gym Slide -->
@@ -132,8 +62,7 @@
                     <div class="carousel-caption d-none d-md-block service-card">
                         <h3>Gym</h3>
                         <p>Get stronger and healthier with our fully equipped gym.</p>
-                        <button onclick="window.location.href='{% url 'book' %}'">Join Now</button>
-                    </div>
+                        <a href="{% url 'book' %}?service=Gym&next={{ request.path }}" class="btn btn-join">Join Now</a>                    </div>
                 </div>
 
                 <!-- Martial Arts Slide -->
@@ -142,7 +71,7 @@
                     <div class="carousel-caption d-none d-md-block service-card">
                         <h3>Martial Arts</h3>
                         <p>Master self-defense techniques and build discipline through martial arts.</p>
-                        <button onclick="window.location.href='#join'">Join Now</button>
+                        <a href="{% url 'book' %}?service=Martial%20Arts&next={{ request.path }}" class="btn btn-join">Join Now</a>
                     </div>
                 </div>
 
@@ -152,7 +81,7 @@
                     <div class="carousel-caption d-none d-md-block service-card">
                         <h3>Yoga</h3>
                         <p>Relax, rejuvenate, and build flexibility with our calming yoga sessions.</p>
-                        <button onclick="window.location.href='#join'">Join Now</button>
+                        <a href="{% url 'book' %}?service=Yoga&next={{ request.path }}" class="btn btn-join">Join Now</a>
                     </div>
                 </div>
 
@@ -162,7 +91,7 @@
                     <div class="carousel-caption d-none d-md-block service-card">
                         <h3>CrossFit</h3>
                         <p>Push your limits with intense CrossFit training sessions.</p>
-                        <button onclick="window.location.href='#join'">Join Now</button>
+                        <a href="{% url 'book' %}?service=CrossFit&next={{ request.path }}" class="btn btn-join">Join Now</a>
                     </div>
                 </div>
 
@@ -172,7 +101,7 @@
                     <div class="carousel-caption d-none d-md-block service-card">
                         <h3>Zumba</h3>
                         <p>Dance your way to fitness with high-energy Zumba classes.</p>
-                        <button onclick="window.location.href='#join'">Join Now</button>
+                        <a href="{% url 'book' %}?service=Zumba&next={{ request.path }}" class="btn btn-join">Join Now</a>
                     </div>
                 </div>
             </div>
@@ -189,23 +118,20 @@
         </div>
     </div>
 
-    <!-- Bootstrap JavaScript and dependencies -->
+    <footer>
+        <p class="text-center">&copy; 2025 Fitness Oasis. All Rights Reserved.</p>
+    </footer>
+
+    <!-- Bootstrap JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Initialize Carousel -->
     <script>
-        document.getElementById('service').addEventListener('change', function() {
-            const serviceId = this.value;
-            fetch(`/get_trainers/${serviceId}/`)
-                .then(response => response.json())
-                .then(data => {
-                    const trainerSelect = document.getElementById('trainer');
-                    trainerSelect.innerHTML = '<option value="">Choose a Trainer</option>';
-                    data.forEach(trainer => {
-                        const option = document.createElement('option');
-                        option.value = trainer.id;
-                        option.textContent = trainer.name;
-                        trainerSelect.appendChild(option);
-                    });
-                });
+        document.addEventListener('DOMContentLoaded', function() {
+            const myCarousel = new bootstrap.Carousel('#servicesSlider', {
+                interval: 5000,
+                wrap: true,
+                keyboard: true
+            });
         });
     </script>
 </body>

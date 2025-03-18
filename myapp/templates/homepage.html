@@ -49,14 +49,22 @@
                             <div class="slide-content">
                                 <h3>Meal Plans</h3>
                                 <p>{{ meal_plan }}</p>
-                                <p><a href="{% url 'meal_plan_detail' %}">See more...</a></p>
+                                {% if meal_plan != "Set your preferences to get your personalized meal plans" %}
+                                    <p><a href="{% url 'meal_plan_detail' %}">See more...</a></p>
+                                {% else %}
+                                    <p><a href="{% url 'profile' %}" class="profile-link">Set your preferences</a></p>
+                                {% endif %}
                             </div>
                         </div>
                         <div class="slide">
                             <div class="slide-content">
                                 <h3>Workout Plans</h3>
                                 <p>{{ workout_plan }}</p>
-                                <p><a href="{% url 'workout_plan_detail' %}">See more...</a></p>
+                                {% if workout_plan != "Set your preferences to get personalized workout" %}
+                                    <p><a href="{% url 'workout_plan_detail' %}">See more...</a></p>
+                                {% else %}
+                                    <p><a href="{% url 'profile' %}" class="profile-link">Set your preferences</a></p>
+                                {% endif %}
                             </div>
                         </div>
                         <div class="slide">

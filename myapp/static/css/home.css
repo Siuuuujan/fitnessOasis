@@ -245,6 +245,17 @@ footer {
     margin: 10px 0;
 }
 
+.slide-content a {
+    text-decoration: none;
+    color: #ff5722;
+}
+.slide-content a:hover {
+    color: rgb(255, 234, 46);
+}
+.slide-content a:active {
+    color: rgb(88, 255, 46);
+}
+
 .slide-content p:first-child {
     font-weight: bold;
 }

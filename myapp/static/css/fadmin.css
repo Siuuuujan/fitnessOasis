@@ -1,177 +1,259 @@
-/* General Reset */
-* {
+body {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f5f5;
 }
 
-/* Body */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
-
-/* Navbar Styling */
 .navbar {
-    background: linear-gradient(135deg, #2c3e50, #34495e);
+    background-color: #1a1a1a;
     color: white;
     padding: 20px;
     text-align: center;
-    font-size: 28px;
+    font-size: 24px;
     font-weight: bold;
-    letter-spacing: 1px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-    border-bottom: 3px solid #007bff;
-    text-transform: uppercase;
-    transition: background 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
-.navbar:hover {
-    background: linear-gradient(135deg, #34495e, #2c3e50);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-}
-
-/* Main Container */
 .main-container {
     display: flex;
-    flex: 1;
-    overflow: hidden;
+    min-height: calc(100vh - 64px);
+    background-color: #f5f5f5;
 }
 
-/* Sidebar Styling */
 .sidebar {
     width: 250px;
-    background: #2c3e50;
+    background-color: #2c3e50;
     padding: 20px;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    box-shadow: 2px 0 6px rgba(0, 0, 0, 0.2);
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
 }
 
 .sidebar button {
     width: 100%;
-    padding: 15px;
-    margin: 10px 0;
-    background: #34495e;
+    padding: 12px 15px;
+    margin: 8px 0;
+    background-color: #34495e;
     color: white;
     border: none;
-    text-align: left;
-    cursor: pointer;
-    font-size: 16px;
     border-radius: 5px;
-    transition: background-color 0.3s ease;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 15px;
+    text-align: left;
 }
 
 .sidebar button:hover {
-    background: #2980b9;
+    background-color: #3498db;
+    transform: translateX(5px);
 }
 
-.sidebar a {
-    text-decoration: none;
-}
-
-.sidebar button:active {
-    background: #1c5d7d;
-}
-
-/* Main Content Area */
 .content {
     flex: 1;
     padding: 30px;
-    overflow-x: auto;
-    overflow-y: auto;
-    background-color: #ecf0f1;
-    display: flex;
-    flex-direction: column;
 }
 
-/* Card Styling */
 .card {
-    display: none; /* Initially hidden */
-    background: white;
-    padding: 20px;
+    display: none;
+    background-color: white;
+    padding: 25px;
+    margin: 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+h2 {
+    color: #2c3e50;
     margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #3498db;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background-color: white;
     border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-    max-height: 80vh; /* Prevent content from being too tall */
 }
 
-.card h2 {
-    font-size: 24px;
-    color: #333;
-    margin-bottom: 15px;
+th {
+    background-color: #2c3e50;
+    color: white;
+    padding: 15px;
+    text-align: left;
+    font-weight: 500;
 }
 
-.card p {
-    font-size: 18px;
-    color: #666;
+td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
 }
 
-.card form {
-    display: flex;
-    flex-direction: column;
+tr:hover {
+    background-color: #f8f9fa;
 }
 
-.card form input[type="text"],
-.card form input[type="time"],
-.card form select,
-.card form textarea {
-    padding: 10px;
-    margin-bottom: 15px;
+.booking-section {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.booking-section h3 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #3498db;
+}
+
+form {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+input[type="text"], 
+input[type="number"],
+select {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
     border: 1px solid #ddd;
     border-radius: 5px;
-    font-size: 14px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
 }
 
-.card form button {
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #007bff;
+input[type="text"]:focus,
+input[type="number"]:focus,
+select:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+button[type="submit"] {
+    background-color: #3498db;
     color: white;
+    padding: 12px 25px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    font-size: 16px;
+    margin-top: 15px;
 }
 
-.card form button:hover {
-    background-color: #0056b3;
+button[type="submit"]:hover {
+    background-color: #2980b9;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    .navbar {
-        font-size: 20px;
+.total-row {
+    background-color: #f8f9fa;
+    font-weight: bold;
+}
+
+.total-row td {
+    border-top: 2px solid #3498db;
+    color: #2c3e50;
+}
+
+@media screen and (max-width: 768px) {
+    .main-container {
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    
+    .content {
         padding: 15px;
     }
-
-    .sidebar {
-        width: 200px;
-    }
-
-    .sidebar button {
+    
+    table {
         font-size: 14px;
     }
+}
 
-    .content {
-        padding: 20px;
+.delete-btn {
+    background-color: #e74c3c;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    font-size: 14px;
+}
+
+.delete-btn:hover {
+    background-color: #c0392b;
+}
+
+.trainers-list table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.trainers-list th {
+    background-color: #2c3e50;
+    color: white;
+    padding: 15px;
+    text-align: left;
+    font-weight: 500;
+}
+
+.trainers-list td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+    color: #333;
+}
+
+.trainers-list tr:hover {
+    background-color: #f8f9fa;
+}
+
+.trainers-list .delete-btn {
+    background-color: #e74c3c;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 14px;
+}
+
+.trainers-list .delete-btn:hover {
+    background-color: #c0392b;
+}
+
+.trainers-list form {
+    margin: 0;
+}
+
+.no-trainers {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+}
+
+@media screen and (max-width: 768px) {
+    .trainers-table {
+        font-size: 14px;
     }
-}
-
-/* Scrollable Content Area */
-.content {
-    overflow: auto; /* Enables scrolling */
-    max-width: 100%;
-    max-height: 90vh; /* Restricts height of the content */
-}
-
-/* Adjustments for Form Elements */
-.card form input[type="checkbox"] {
-    margin-right: 10px;
+    
+    .trainers-table th,
+    .trainers-table td {
+        padding: 10px;
+    }
 }

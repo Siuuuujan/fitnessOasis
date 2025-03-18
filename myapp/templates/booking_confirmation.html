@@ -57,18 +57,21 @@
     <hr>
     <p>Your booking has been confirmed. We look forward to seeing you soon!</p>
 
-    <form action="https://esewa.com.np/epay/main" method="POST">
-      <input type="hidden" name="amt" value="{{ booking.price }}">  <!-- Total Amount -->
-      <input type="hidden" name="pdc" value="0">  <!-- Product Delivery Charge -->
-      <input type="hidden" name="psc" value="0">  <!-- Product Service Charge -->
-      <input type="hidden" name="txAmt" value="0">  <!-- Tax Amount -->
-      <input type="hidden" name="tAmt" value="{{ booking.price }}">  <!-- Total Payable Amount -->
-      <input type="hidden" name="pid" value="{{ booking.id }}">  <!-- Booking ID -->
-      <input type="hidden" name="scd" value="9806800001/2/3/4/5">  <!-- eSewa Merchant ID -->
-      <input type="hidden" name="su" value="http://yourwebsite.com/payment-success">  <!-- Success URL -->
-      <input type="hidden" name="fu" value="http://yourwebsite.com/payment-failed">  <!-- Failure URL -->
-      
-      <button type="submit">Pay Now with eSewa</button>
+    <form action="https://rc-epay.esewa.com.np/api/epay/main/v2/form" method="POST">
+      <!-- Required Fields -->
+      <input type="hidden" name="amount" value="{{ total_amount }}">
+      <input type="hidden" name="tax_amount" value="0">
+      <input type="hidden" name="total_amount" value="{{ total_amount }}">
+      <input type="hidden" name="transaction_uuid" value="{{ transaction_uuid }}">
+      <input type="hidden" name="product_code" value="EPAYTEST">
+      <input type="hidden" name="product_service_charge" value="0">
+      <input type="hidden" name="product_delivery_charge" value="0">
+      <input type="hidden" name="success_url" value="{{ success_url }}">
+      <input type="hidden" name="failure_url" value="{{ failure_url }}">
+      <input type="hidden" name="signed_field_names" value="total_amount,transaction_uuid,product_code">
+      <input type="hidden" name="signature" value="{{ signature }}">
+      <input type="hidden" name="scd" value="{{ merchant_code }}">
+      <input type="submit" value="Pay with eSewa">
   </form>
   
   </div>

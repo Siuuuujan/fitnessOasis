@@ -112,6 +112,7 @@ p {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    margin-bottom: 30px;
 }
 
 /* Form Labels */

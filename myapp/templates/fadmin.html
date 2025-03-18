@@ -4,9 +4,10 @@
 <head>
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="{% static 'css/fadmin.css' %}">
+    <!-- Add Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-
     <!-- Navbar -->
     <div class="navbar">
         Welcome to Admin Dashboard
@@ -18,109 +19,408 @@
             <button onclick="showCard('bookings')">Total Bookings</button>
             <button onclick="showCard('services')">Add Services</button>
             <button onclick="showCard('trainers')">Add Trainers</button>
-            <button onclick="showCard('slots_month')">Training Slots (Month)</button>
-            <button onclick="showCard('slots_week')">Training Slots (Week)</button>
-            <button onclick="showCard('members')">Total Enrolled Members</button>
+            <button onclick="showCard('available_trainers')">Available Trainers</button>
+            <button onclick="showCard('slots_month')">Training Slots</button>
+            <button onclick="showCard('revenue')">Total Revenue</button>
+            <button onclick="showCard('contacts')">Contact Messages</button>
             <a href="{% url 'admin_logout' %}">
                 <button>Logout</button>
             </a>
         </div>
 
-            <!-- Main Content -->
-            <div class="content">
-                <div id="bookings" class="card">
-                    <h2>Total Bookings</h2>
-                    <p>{{ total_bookings }}</p>
-                </div>
-
-                <div id="services" class="card">
-                    <h2>Add a New Service</h2>
-                
-                    <form method="POST">
-                        {% csrf_token %}
-                        
-                        <label for="service-name">Service Name</label>
-                        <input type="text" name="service-name" id="service-name" required><br>
-                
-                        <button type="submit" name="add_service">Add Service</button>
-                    </form>
-                </div>               
-
-                <!-- fadmin.html -->
-                <div id="trainers" class="card">
-                    <h2>Available Trainers</h2>
-                    <p>{{ available_trainers }}</p>
-
-                    <h3>Add a New Trainer</h3>
-                    <form method="POST">
-                        {% csrf_token %}
-                        <div>
-                            <label for="trainer-name">Trainer Name</label>
-                            <input type="text" id="trainer-name" name="trainer-name" required>
-                        </div>
-                    
-                        <div>
-                            <label for="service">Service</label>
-                            <select id="service" name="service" required>
-                                {% for service in services %}
-                                    <option value="{{ service.id }}">{{ service.name }}</option>
+        <!-- Main Content -->
+        <div class="content">
+            <!-- Move available_trainers inside content div -->
+            <!-- Replace the existing trainers table in fadmin.html -->
+            <div id="available_trainers" class="card">
+                <h2>Available Trainers</h2>
+                <div class="trainers-list">
+                    {% if trainers %}
+                        <table class="trainers-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Service</th>
+                                    <th>Experience</th>
+                                    <th>Daily Rate</th>
+                                    <th>Time Slots</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for trainer in trainers %}
+                                    <tr>
+                                        <td>{{ trainer.name }}</td>
+                                        <td>{{ trainer.service.name }}</td>
+                                        <td>{{ trainer.experience }}</td>
+                                        <td>Rs.{{ trainer.daily_rate }}</td>
+                                        <td>
+                                            {% for time_slot in trainer.available_time_slots %}
+                                                {{ time_slot }}{% if not forloop.last %}, {% endif %}
+                                            {% endfor %}
+                                        </td>
+                                        <td>
+                                            <form action="{% url 'delete_trainer' trainer.id %}" method="POST">
+                                                {% csrf_token %}
+                                                <button type="submit" class="delete-btn" 
+                                                        onclick="return confirm('Are you sure you want to delete this trainer?')">
+                                                    Delete
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
                                 {% endfor %}
-                            </select>
-                        </div>
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <p class="no-trainers">No trainers available.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div id="bookings" class="card">
+                <h2>Total Bookings: {{ total_bookings }}</h2>
+                
+                <div class="booking-tables">
+                    <div class="booking-section">
+                        <h3>Gym Bookings</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Trainer</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Time Slot</th>
+                                    <th>Price</th>
+                                    <th>User</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for booking in paid_bookings %}
+                                    {% if booking.service.name == 'Gym' %}
+                                        <tr>
+                                            <td>{{ booking.trainer.name }}</td>
+                                            <td>{{ booking.start_date }}</td>
+                                            <td>{{ booking.end_date }}</td>
+                                            <td>{{ booking.time_slot }}</td>
+                                            <td>Rs.{{ booking.price }}</td>
+                                            <td>{{ booking.user.username }}</td>
+                                        </tr>
+                                    {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="booking-section">
+                        <h3>Martial Arts Bookings</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Trainer</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Time Slot</th>
+                                    <th>Price</th>
+                                    <th>User</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for booking in paid_bookings %}
+                                    {% if booking.service.name == 'Martial Arts' %}
+                                        <tr>
+                                            <td>{{ booking.trainer.name }}</td>
+                                            <td>{{ booking.start_date }}</td>
+                                            <td>{{ booking.end_date }}</td>
+                                            <td>{{ booking.time_slot }}</td>
+                                            <td>Rs.{{ booking.price }}</td>
+                                            <td>{{ booking.user.username }}</td>
+                                        </tr>
+                                    {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="booking-section">
+                        <h3>Zumba Bookings</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Trainer</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Time Slot</th>
+                                    <th>Price</th>
+                                    <th>User</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for booking in paid_bookings %}
+                                    {% if booking.service.name == 'Zumba' %}
+                                        <tr>
+                                            <td>{{ booking.trainer.name }}</td>
+                                            <td>{{ booking.start_date }}</td>
+                                            <td>{{ booking.end_date }}</td>
+                                            <td>{{ booking.time_slot }}</td>
+                                            <td>Rs.{{ booking.price }}</td>
+                                            <td>{{ booking.user.username }}</td>
+                                        </tr>
+                                    {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="booking-section">
+                        <h3>Yoga Bookings</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Trainer</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Time Slot</th>
+                                    <th>Price</th>
+                                    <th>User</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for booking in paid_bookings %}
+                                    {% if booking.service.name == 'Yoga' %}
+                                        <tr>
+                                            <td>{{ booking.trainer.name }}</td>
+                                            <td>{{ booking.start_date }}</td>
+                                            <td>{{ booking.end_date }}</td>
+                                            <td>{{ booking.time_slot }}</td>
+                                            <td>Rs.{{ booking.price }}</td>
+                                            <td>{{ booking.user.username }}</td>
+                                        </tr>
+                                    {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="booking-section">
+                        <h3>Cross Fit Bookings</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Trainer</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Time Slot</th>
+                                    <th>Price</th>
+                                    <th>User</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for booking in paid_bookings %}
+                                    {% if booking.service.name == 'Cross Fit' %}
+                                        <tr>
+                                            <td>{{ booking.trainer.name }}</td>
+                                            <td>{{ booking.start_date }}</td>
+                                            <td>{{ booking.end_date }}</td>
+                                            <td>{{ booking.time_slot }}</td>
+                                            <td>Rs.{{ booking.price }}</td>
+                                            <td>{{ booking.user.username }}</td>
+                                        </tr>
+                                    {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+            <div id="services" class="card">
+                <h2>Add a New Service</h2>
+                <form method="POST">
+                    {% csrf_token %}
+                    <label for="service-name">Service Name</label>
+                    <input type="text" name="service-name" id="service-name" required><br>
+                    <button type="submit" name="add_service">Add Service</button>
+                </form>
+            </div>
+
+            <!-- Remove the revenue card from inside trainers section -->
+            <div id="trainers" class="card">
+                <h2>Add a New Trainer</h2>
+                <form method="POST">
+                    {% csrf_token %}
+                    <label for="trainer-name">Trainer Name</label>
+                    <input type="text" name="trainer-name" id="trainer-name" required><br>
                     
-                        <div>
-                            <label for="experience">Experience</label>
-                            <input type="text" id="experience" name="experience" required>
-                        </div>
+                    <label for="service">Service</label>
+                    <select name="service" id="service" required>
+                        {% for service in services %}
+                            <option value="{{ service.id }}">{{ service.name }}</option>
+                        {% endfor %}
+                    </select><br>
+                    
+                    <label for="experience">Experience</label>
+                    <input type="text" name="experience" id="experience" required><br>
+                    
+                    <label for="daily_rate">Daily Rate</label>
+                    <input type="text" name="daily_rate" id="daily_rate" required><br>
+                    
+                    <h4>Available Time Slots</h4>
+                    <input type="checkbox" name="time_slots" value="morning" id="morning">
+                    <label for="morning">Morning (6 AM - 12 PM)</label><br>
+                    
+                    <input type="checkbox" name="time_slots" value="afternoon" id="afternoon">
+                    <label for="afternoon">Afternoon (12 PM - 5 PM)</label><br>
+                    
+                    <input type="checkbox" name="time_slots" value="evening" id="evening">
+                    <label for="evening">Evening (5 PM - 9 PM)</label><br>
+                    
+                    <button type="submit" name="add_trainer">Add Trainer</button>
+                </form>
+            </div>
 
-                        <div>
-                            <label for="daily_rate">Daily Rate</label>
-                            <input type="text" id="daily_rate" name="daily_rate" required>
-                        </div>
-
-                        <h3>Assign Availability</h3><br>
-                        <div>
-                            <label for="morning">Morning (6 AM - 12 PM)</label>
-                            <input type="checkbox" id="morning" name="time_slots" value="morning"><br>
-                            
-                            <label for="afternoon">Afternoon (12 PM - 5 PM)</label>
-                            <input type="checkbox" id="afternoon" name="time_slots" value="afternoon"><br>
-                            
-                            <label for="evening">Evening (5 PM - 9 PM)</label>
-                            <input type="checkbox" id="evening" name="time_slots" value="evening"><br>
-                        </div><br>
-
-                        <button type="submit" name="add_trainer">Add Trainer</button>
-                    </form>
+            <div id="slots_month" class="card">
+                <h2>Training Slots Overview</h2>
+                <div class="booking-section">
+                    <p>Total Slots This Month: {{ slots_per_month }}</p>
+                    <p>Total Slots This Week: {{ slots_per_week }}</p>
                 </div>
+            </div>
 
-                <div id="slots_month" class="card"> 
-                    <h2>Training Slots Sold (Month)</h2>
-                    <p>{{ slots_per_month }}</p>
+            <div id="revenue" class="card">
+                <h2>Total Revenue</h2>
+                <div class="booking-section">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Service</th>
+                                <th>Monthly Revenue</th>
+                                <th>Total Bookings</th>
+                                <th>Average per Booking</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Gym</td>
+                                <td>Rs.{{ gym_revenue|floatformat:2 }}</td>
+                                <td>{{ gym_bookings }}</td>
+                                <td>Rs.{{ gym_average|floatformat:2 }}</td>
+                            </tr>
+                            <tr>
+                                <td>CrossFit</td>
+                                <td>Rs.{{ CrossFit_revenue|floatformat:2 }}</td>
+                                <td>{{ CrossFit_bookings }}</td>
+                                <td>Rs.{{ CrossFit_average|floatformat:2 }}</td>
+                            </tr>
+                            <tr>
+                                <td>Martial Arts</td>
+                                <td>Rs.{{ martial_revenue|floatformat:2 }}</td>
+                                <td>{{ martial_bookings }}</td>
+                                <td>Rs.{{ martial_average|floatformat:2 }}</td>
+                            </tr>
+                            <tr>
+                                <td>Yoga</td>
+                                <td>Rs.{{ Yoga_revenue|floatformat:2 }}</td>
+                                <td>{{ Yoga_bookings }}</td>
+                                <td>Rs.{{ Yoga_average|floatformat:2 }}</td>
+                            </tr>
+                            <tr>
+                                <td>Zumba</td>
+                                <td>Rs.{{ Zumba_revenue|floatformat:2 }}</td>
+                                <td>{{ Zumbal_bookings }}</td>
+                                <td>Rs.{{ Zumba_average|floatformat:2 }}</td>
+                            </tr>
+                            <tr class="total-row">
+                                <td><strong>Total</strong></td>
+                                <td><strong>Rs.{{ total_revenue|floatformat:2 }}</strong></td>
+                                <td><strong>{{ total_bookings }}</strong></td>
+                                <td><strong>Rs.{{ total_average|floatformat:2 }}</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-
-                <div id="slots_week" class="card">
-                    <h2>Training Slots Sold (Week)</h2>
-                    <p>{{ slots_per_week }}</p>
-                </div>
-
-                <div id="members" class="card">
-                    <h2>Total Enrolled Members</h2>
-                    <p>{{ total_members }}</p>
-                </div>
+            </div>
+            <div id="contacts" class="card">
+                <h2>Contact Messages</h2>
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Message</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for message in contact_messages %}
+                            <tr>
+                                <td>{{ message.name }}</td>
+                                <td>{{ message.email }}</td>
+                                <td>{{ message.message }}</td>
+                                <td>{{ message.created_at|date:"Y-m-d H:i" }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="4">No messages yet.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
     <script>
         function showCard(cardId) {
-            // Hide all cards
             var cards = document.querySelectorAll('.card');
             cards.forEach(card => card.style.display = 'none');
-
-            // Show the selected card
             document.getElementById(cardId).style.display = 'block';
         }
+
+        // Show bookings card by default
+        document.addEventListener('DOMContentLoaded', function() {
+            showCard('bookings');
+        });
     </script>
 
+    <!-- Add this before the closing </body> tag -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Show bookings card by default
+        showCard('bookings');
+        
+        const trainerForm = document.querySelector('form[name="trainer-form"]');
+        if (trainerForm) {
+            trainerForm.addEventListener('submit', function(e) {
+                const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+                e.preventDefault();
+                
+                const formData = new FormData(this);
+                
+                fetch(window.location.href, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': csrfToken,
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        window.location.reload();
+                    } else {
+                        alert('Error adding trainer: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error adding trainer. Please try again.');
+                });
+            });
+        }
+    });
+    </script>
 </body>
 </html>
