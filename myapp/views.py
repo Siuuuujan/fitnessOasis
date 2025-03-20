@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
+from django.db import models 
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login, logout
@@ -10,6 +11,7 @@ from django.views.decorators.cache import never_cache
 from datetime import datetime, timedelta
 from django.core.exceptions import ValidationError
 from urllib.parse import urlencode
+from decimal import Decimal, ROUND_HALF_UP
 import requests
 import base64
 import uuid
@@ -18,7 +20,8 @@ import hashlib
 import requests
 import json
 import os
-from django.db.models import Sum
+import logging
+from django.db.models import Sum, Count
 
 
 # Constants for eSewa integration
@@ -50,7 +53,7 @@ def confirm_order(request, booking_id):
         booking.save()
 
         # Cast total_amount to integer (eSewa expects no decimals)
-        total_amount = int(booking.price)
+        total_amount = int(Decimal(booking.price).quantize(Decimal('1.'), rounding=ROUND_HALF_UP))
 
         # Generate the message with strict formatting (no spaces)
         message = f"total_amount={total_amount},transaction_uuid={transaction_uuid},product_code=EPAYTEST"
@@ -73,8 +76,12 @@ def confirm_order(request, booking_id):
         return redirect('homepage')
 
 # View to handle eSewa payment success response
+logger = logging.getLogger(__name__)
 def success(request):
     try:
+        logger.info(f"User session key: {request.session.session_key}")
+        logger.info(f"User authenticated: {request.user.is_authenticated}")
+
         encoded_data = request.GET.get('data')
         if not encoded_data:
             return render(request, 'error.html', {'message': 'No payment data received.'})
@@ -120,6 +127,9 @@ def success(request):
             else:
                 messages.warning(request, "This booking is already paid.")
 
+            # Keep the user logged in
+            update_session_auth_hash(request, request.user)
+
             return render(request, 'success.html', {
                 'message': 'Payment successful!',
                 'booking': booking
@@ -127,7 +137,8 @@ def success(request):
         else:
             return render(request, 'error.html', {'message': 'Invalid payment signature.'})
     except Exception as e:
-        return render(request, 'error.html', {'message': f"An error occurred: {str(e)}"})
+        logger.error(f"Error in success view: {str(e)}")
+        return render(request, 'error.html', {'message': f"An error occurred: {str(e)}" })
     
 # View to handle eSewa payment failure
 def failure(request):
@@ -283,26 +294,46 @@ def generate_hydration_plan(profile):
         return f"Stay hydrated! Your daily water intake: {water_intake:.2f} liters."
     return "Please update your profile with your weight to get a personalized hydration plan."
 
-def homepage(request):
-    # Get the user's profile if authenticated
-    profile = Profile.objects.get(user=request.user) if request.user.is_authenticated else None
+def get_users_with_similar_goals(current_user):
+    current_goal = current_user.profile.fitness_goal
+    return Profile.objects.filter(fitness_goal=current_goal).exclude(user=current_user)
 
-    # Check if the profile exists and has the necessary data for meal/workout/hydration plans
+def get_recommended_services(current_user, limit=5):
+    similar_users = get_users_with_similar_goals(current_user)
+    similar_user_ids = [profile.user.id for profile in similar_users]
+    
+    return (
+        Booking.objects
+        .filter(user__id__in=similar_user_ids, paid=True)
+        .select_related('service', 'trainer')
+        .order_by('-start_date')[:limit]
+    )
+
+# Keep only one version of homepage view
+def homepage(request):
+    profile = None
+    recommended_bookings = []
+    
+    try:
+        if request.user.is_authenticated:
+            profile = Profile.objects.get(user=request.user)
+    except Profile.DoesNotExist:
+        pass
+
     if profile:
         meal_plan = generate_meal_plan(profile)
         workout_plan = generate_workout_plan(profile)
         hydration_plan = generate_hydration_plan(profile)
+        recommended_bookings = get_recommended_services(request.user)
     else:
-        meal_plan = None
-        workout_plan = None
-        hydration_plan = None
-    
-    # Pass these plans to the template
+        meal_plan = workout_plan = hydration_plan = None
+
     return render(request, 'homepage.html', {
         'profile': profile,
         'meal_plan': meal_plan,
         'workout_plan': workout_plan,
         'hydration_plan': hydration_plan,
+        'recommended_bookings': recommended_bookings,  # Match template variable name
     })
 
 API_KEY = "6769c288e7784defaf9cd89214732996"
@@ -386,29 +417,6 @@ def hydration_plan_detail(request):
 
     return render(request, 'hydration_plan.html', {'hydration_plan': hydration_plan})
 
-
-# View for the homepage
-def homepage(request):
-    profile = Profile.objects.get(user=request.user) if request.user.is_authenticated else None
-    
-    if profile:
-        # Generate dynamic recommendations based on the user's profile
-        meal_plan = generate_meal_plan(profile)
-        workout_plan = generate_workout_plan(profile)
-        hydration_plan = generate_hydration_plan(profile)
-    else:
-        # Provide default messages if the profile is empty
-        meal_plan = "Please complete your profile to get personalized meal plans."
-        workout_plan = "Please complete your profile to get personalized workout plans."
-        hydration_plan = "Please complete your profile to get personalized hydration plans."
-    
-    return render(request, 'homepage.html', {
-        'profile': profile,
-        'meal_plan': meal_plan,
-        'workout_plan': workout_plan,
-        'hydration_plan': hydration_plan,
-    })
-
 def faqs(request):
     return render(request, 'faqs.html')
 
@@ -484,6 +492,9 @@ def user_login(request):
 @login_required
 def profile(request):
     profile = request.user.profile
+    bookings = Booking.objects.filter(user=request.user).order_by('-start_date')  # Fetch user's bookings
+    print(bookings)
+
     if request.method == 'POST':
         if 'update_profile' in request.POST:
             profile.age = request.POST.get('age', profile.age)
@@ -546,8 +557,13 @@ def profile(request):
             messages.success(request, "Password updated successfully!")
         
         return redirect('profile')
+    
+    print(f"Number of bookings: {bookings.count()}")
 
-    return render(request, 'profile.html', {'profile': profile})
+    return render(request, 'profile.html', {
+        'profile': profile,
+        'bookings': bookings
+        })
 
 def logout_view(request):
     logout(request)
@@ -702,7 +718,6 @@ def fadmin(request):
             except Exception as e:
                 messages.error(request, f"Error: {str(e)}")
 
-        # Handle adding a new service
         elif 'add_service' in request.POST:
             service_name = request.POST.get('service-name')
             if not service_name:
@@ -715,13 +730,23 @@ def fadmin(request):
 
         return redirect('fadmin')
 
+    # Calculate revenue, bookings, and average per booking for each service
+    service_data = Booking.objects.filter(paid=True).values('service__name').annotate(
+        total_revenue=Sum('price'),
+        total_bookings=Count('id'),
+        average_per_booking=Sum('price') / Count('id')
+    )
+
+    # Prepare data for each service
+    service_revenue_data = {service['service__name']: service for service in service_data}
+
     # Fetch data for the dashboard
     services = Service.objects.all()
     trainers = Trainer.objects.all()
     available_trainers = Trainer.objects.count()
     total_bookings = Booking.objects.count()
     paid_bookings = Booking.objects.filter(paid=True)
-    total_revenue = sum(booking.price for booking in paid_bookings)
+    total_revenue = paid_bookings.aggregate(Sum('price'))['price__sum'] or 0
     
     # Calculate slots
     now = datetime.now()
@@ -745,6 +770,7 @@ def fadmin(request):
         'slots_per_week': slots_per_week,
         'total_members': total_members,
         'contact_messages': contact_messages,
+        'service_revenue_data': service_revenue_data,  # Pass the calculated revenue data
     })
 
 

@@ -332,6 +332,8 @@ footer {
     margin-right: 10px;
 }
 
+
+
 @keyframes bounce {
     0%, 20%, 50%, 80%, 100% {
         transform: translateY(0);
@@ -341,5 +343,258 @@ footer {
     }
     60% {
         transform: translateY(-5px);
+    }
+}
+
+/* Recommended Packages Section */
+.recommendation {
+    background-color: #212121; /* Dark gray background */
+    padding: 30px 0;
+    text-align: center;
+    border-radius: 20px;
+    margin: 20px auto;
+    width: 80%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Darker shadow for a stronger gym feel */
+    font-family: 'Arial', sans-serif;
+}
+
+.for-you {
+    font-size: 24px;
+    font-weight: bold;
+    color: #ff5722; /* Vibrant orange for energy */
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.package-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+.package-card {
+    background-color: #333; /* Dark background for each card */
+    border-radius: 15px;
+    padding: 20px;
+    width: 300px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Darker shadow to match gym vibe */
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.package-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5); /* Stronger shadow on hover */
+}
+
+.package-card h3 {
+    color: #ff5722; /* Vibrant orange for headings */
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.package-card p {
+    color: #fff; /* White text for better readability */
+    font-size: 16px;
+    margin: 10px 0;
+}
+
+.package-card .btn {
+    background-color: #ff5722; /* Orange for buttons */
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.package-card .btn:hover {
+    background-color: #e64a19; /* Darker orange on hover */
+}
+
+/* Modal for Package Details */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #333; /* Dark background for modal */
+    padding: 20px;
+    border-radius: 15px;
+    width: 80%;
+    max-width: 500px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Darker shadow to match gym vibe */
+}
+
+.modal-content h2 {
+    color: #ff5722; /* Vibrant orange for headings */
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.modal-content p {
+    color: #fff; /* White text for better readability */
+    font-size: 16px;
+    margin: 10px 0;
+}
+
+.modal-content .close {
+    color: #ff5722; /* Orange for close button */
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    transition: color 0.3s ease;
+}
+
+.modal-content .close:hover {
+    color: #e64a19; /* Darker orange on hover */
+}
+
+/* Packages For You Section */
+.packages-recommendation {
+    background-color: #212121; /* Dark gray background */
+    padding: 30px 0;
+    text-align: center;
+    border-radius: 20px;
+    margin: 20px auto;
+    width: 80%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Darker shadow for a stronger gym feel */
+    font-family: 'Arial', sans-serif;
+}
+
+.packages-for-you {
+    font-size: 24px;
+    font-weight: bold;
+    color: #ff5722; /* Vibrant orange for energy */
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.packages-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+.packages-card {
+    background-color: #333; /* Dark background for each card */
+    border-radius: 15px;
+    padding: 20px;
+    width: 300px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Darker shadow to match gym vibe */
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.packages-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5); /* Stronger shadow on hover */
+}
+
+.packages-card h3 {
+    color: #ff5722; /* Vibrant orange for headings */
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.packages-card p {
+    color: #fff; /* White text for better readability */
+    font-size: 16px;
+    margin: 10px 0;
+}
+
+.packages-card .btn {
+    background-color: #ff5722; /* Orange for buttons */
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.packages-card .btn:hover {
+    background-color: #e64a19; /* Darker orange on hover */
+}
+
+/* Empty State for Packages Container */
+.packages-container.empty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px; /* Adjust height as needed */
+    background-color: #444; /* Slightly lighter dark background */
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Consistent shadow */
+    padding: 20px;
+    text-align: center;
+}
+
+.packages-container.empty p {
+    color: #ff5722; /* Vibrant orange for the message */
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .package-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .package-card {
+        width: 90%;
+    }
+
+    .modal-content {
+        width: 90%;
+    }
+}
+
+@media (max-width: 480px) {
+    .for-you {
+        font-size: 20px;
+    }
+
+    .package-card h3 {
+        font-size: 20px;
+    }
+
+    .package-card p {
+        font-size: 14px;
+    }
+
+    .modal-content h2 {
+        font-size: 20px;
+    }
+
+    .modal-content p {
+        font-size: 14px;
     }
 }

@@ -8,23 +8,28 @@
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
 </head>
 <body>
-    <img src="{% static 'images/gym-background.jpg' %}" id="background-img">
+    <!-- Background Image -->
+    <img src="{% static 'images/gym-background.jpg' %}" id="background-img" alt="Gym Background">
+
+    <!-- Main Container -->
     <div class="main">
+        <!-- Navigation Bar -->
         <div class="nav-bar">
             <div class="logo">
-                <img src="{% static 'images/logo.png' %}" alt="">
+                <img src="{% static 'images/logo.png' %}" alt="Fitness Oasis Logo">
             </div>
             <div class="navbar-contents">
                 <a href="{% url 'homepage' %}">Home</a>
                 <a href="{% url 'about' %}">About</a>
                 <a href="{% url 'contact' %}">Contact</a>
                 <a href="{% url 'faqs' %}">FAQs</a>
-                <a href="{% url 'testimonials' %}">Testimonals</a>
-                <a href="{% url 'login' %}"></a>   
+                <a href="{% url 'testimonials' %}">Testimonials</a>
                 {% if user.is_authenticated %}
                     <a href="{% url 'profile' %}">
                         <div class="profile">
-                            <img src="{% if profile.profile_picture %}{{ profile.profile_picture.url }}{% else %}{% static 'images/default-profile.png' %}{% endif %}" class="profile-pic" alt="Profile Picture">
+                            <img src="{% if profile.profile_picture %}{{ profile.profile_picture.url }}{% else %}{% static 'images/default-profile.png' %}{% endif %}" 
+                                 class="profile-pic" 
+                                 alt="Profile Picture">
                         </div>
                     </a>
                 {% else %}
@@ -35,109 +40,151 @@
             </div>
         </div>
 
+        <!-- Page Content -->
         <div class="content">
-            <div class="hero">Welcome to your BEST SELF!!!<br>
+            <!-- Hero Section -->
+            <div class="hero">
+                <h2>Welcome to your BEST SELF!!!</h2>
                 <p>At Fitness Oasis, we believe that fitness is a journey, not a destination. Our membership offers you all the tools, support, and motivation you need to build strength, endurance, and confidence. Whether you're here to tone up, lose weight, or push your limits, we've got you covered.</p>
             </div>
-                
-            {% if user.is_authenticated %}
-            <div class="recommendation">
-                <div class="for-you">Recommendations For You</div>
-                <div class="fy-slider">
-                    <div class="slider-container">
-                        <div class="slide">
-                            <div class="slide-content">
-                                <h3>Meal Plans</h3>
-                                <p>{{ meal_plan }}</p>
-                                {% if meal_plan != "Set your preferences to get your personalized meal plans" %}
-                                    <p><a href="{% url 'meal_plan_detail' %}">See more...</a></p>
-                                {% else %}
-                                    <p><a href="{% url 'profile' %}" class="profile-link">Set your preferences</a></p>
-                                {% endif %}
-                            </div>
-                        </div>
-                        <div class="slide">
-                            <div class="slide-content">
-                                <h3>Workout Plans</h3>
-                                <p>{{ workout_plan }}</p>
-                                {% if workout_plan != "Set your preferences to get personalized workout" %}
-                                    <p><a href="{% url 'workout_plan_detail' %}">See more...</a></p>
-                                {% else %}
-                                    <p><a href="{% url 'profile' %}" class="profile-link">Set your preferences</a></p>
-                                {% endif %}
-                            </div>
-                        </div>
-                        <div class="slide">
-                            <div class="slide-content">
-                                <h3>Hydration Plans</h3>
-                                <p>{{ hydration_plan }}</p>
-                            </div>
-                        </div>
-                    </div>
-                    <button class="prev" onclick="moveSlide(-1)">&#10094;</button>
-                    <button class="next" onclick="moveSlide(1)">&#10095;</button>
-                </div>
-            </div>
-        {% else %}
-            <p class="login-message">Please log in to view personalized recommendations.</p>
-        {% endif %}
 
+            {% if user.is_authenticated %}
+                <!-- Recommendations Section -->
+                <div class="recommendation">
+                    <div class="for-you">Recommendations For You</div>
+                    <div class="fy-slider">
+                        <div class="slider-container">
+                            <!-- Meal Plan Slide -->
+                            <div class="slide">
+                                <div class="slide-content">
+                                    <h3>Meal Plans</h3>
+                                    <p>{{ meal_plan }}</p>
+                                    {% if meal_plan and "Set your preferences" not in meal_plan %}
+                                        <p><a href="{% url 'meal_plan_detail' %}">See more...</a></p>
+                                    {% else %}
+                                        <p><a href="{% url 'profile' %}" class="profile-link">Set your preferences</a></p>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <!-- Workout Plan Slide -->
+                            <div class="slide">
+                                <div class="slide-content">
+                                    <h3>Workout Plans</h3>
+                                    <p>{{ workout_plan }}</p>
+                                    {% if workout_plan and "Set your preferences" not in workout_plan %}
+                                        <p><a href="{% url 'workout_plan_detail' %}">See more...</a></p>
+                                    {% else %}
+                                        <p><a href="{% url 'profile' %}" class="profile-link">Set your preferences</a></p>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <!-- Hydration Plan Slide -->
+                            <div class="slide">
+                                <div class="slide-content">
+                                    <h3>Hydration Plans</h3>
+                                    <p>{{ hydration_plan }}</p>
+                                    {% if not profile.weight %}
+                                        <p><a href="{% url 'profile' %}" class="profile-link">Update your weight</a></p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <button class="prev" onclick="moveSlide(-1)">&#10094;</button>
+                        <button class="next" onclick="moveSlide(1)">&#10095;</button>
+                    </div>
+                </div>
+
+                <!-- Packages Section -->
+                <div class="recommendation">
+                    <div class="for-you">Recommended Packages</div>
+                    <div class="package-container">
+                        {% for booking in recommended_bookings %}
+                            <div class="package-card">
+                                <h3>{{ booking.service.name }}</h3>
+                                <p><strong>Trainer:</strong> {{ booking.trainer.name }}</p>
+                                <p><strong>Time Slot:</strong> {{ booking.time_slot }}</p>
+                                <p><strong>Duration:</strong> {{ booking.start_date|date:"M d" }} - {{ booking.end_date|date:"M d" }}</p>
+                                <p><strong>Price:</strong> Rs. {{ booking.price|floatformat:"0" }}</p>
+                                <!-- Buy Package Button -->
+                                <a href="{% url 'book' %}?service={{ booking.service.name|urlencode }}" class="btn btn-primary">
+                                    Buy Package
+                                </a>
+                            </div>
+                        {% empty %}
+                            <div class="empty-message">
+                                <p>No recommendations found. Here's how to get started:</p>
+                                <ul>
+                                    <li>Complete your <a href="{% url 'profile' %}">profile</a></li>
+                                    <li>Book your first session</li>
+                                    <li>Explore our <a href="{% url 'services' %}">services</a></li>
+                                </ul>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% else %}
+                <!-- Guest Message -->
+                <div class="guest-message">
+                    <p>Ready to start your fitness journey? <a href="{% url 'register' %}">Register now</a> or <a href="{% url 'login' %}">log in</a> to get personalized recommendations!</p>
+                </div>
+            {% endif %}
+
+            <!-- Quick Links -->
             <div class="three-content">
                 <div class="our-services" id="servicesBtn">
-                    <img src="{% static 'images/services.png' %}" alt="">
+                    <img src="{% static 'images/services.png' %}" alt="Services">
                     <h1>Services</h1>
                 </div>
                 <div class="our-trainers" id="trainersBtn">
-                    <img src="{% static 'images/trainers.png' %}" alt="">
+                    <img src="{% static 'images/trainers.png' %}" alt="Trainers">
                     <h1>Trainers</h1>
                 </div>
                 <div class="our-timetable" id="timetableBtn">
-                    <img src="{% static 'images/timetable.webp' %}" alt="">
-                    <h1>BMI and Ideal Weight Calculator</h1>
+                    <img src="{% static 'images/timetable.webp' %}" alt="BMI Calculator">
+                    <h1>BMI Calculator</h1>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Footer -->
     <footer>
         <p class="text-center">&copy; 2025 Fitness Oasis. All Rights Reserved.</p>
     </footer>
 
-    <script src="{% static 'js/homepage.js' %}"></script>
+    <!-- JavaScript -->
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const servicesBtn = document.getElementById("servicesBtn");
-    
-            servicesBtn.addEventListener("click", function() {
-                window.location.href = "{% url 'services' %}"; 
+        // Slider Functionality
+        let currentIndex = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        function moveSlide(step) {
+            currentIndex = (currentIndex + step + totalSlides) % totalSlides;
+            document.querySelector('.slider-container').style.transform = 
+                `translateX(-${currentIndex * 100}%)`;
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            // Quick Links
+            document.getElementById('servicesBtn').addEventListener('click', () => {
+                window.location.href = "{% url 'services' %}";
             });
 
-            const trainersBtn = document.getElementById("trainersBtn");
-    
-            trainersBtn.addEventListener("click", function() {
-                window.location.href = "{% url 'trainers' %}"; 
+            document.getElementById('trainersBtn').addEventListener('click', () => {
+                window.location.href = "{% url 'trainers' %}";
             });
 
-            const timetableBtn = document.getElementById("timetableBtn");
-    
-            timetableBtn.addEventListener("click", function() {
-                window.location.href = "{% url 'bmi' %}"; 
+            document.getElementById('timetableBtn').addEventListener('click', () => {
+                window.location.href = "{% url 'bmi' %}";
             });
         });
 
-        let currentIndex = 0;
-
-        function moveSlide(step) {
-            const slides = document.querySelectorAll('.slide');
-            const totalSlides = slides.length;
-            currentIndex = (currentIndex + step + totalSlides) % totalSlides;
-            const sliderContainer = document.querySelector('.slider-container');
-            sliderContainer.style.transform = `translateX(-${currentIndex * 100}%)`;
-        }
-
-        // Optional: Autoplay the slider every 3 seconds
-        setInterval(() => moveSlide(1), 10000); // Change slide every 3 seconds
+        // Auto-advance slider every 8 seconds
+        setInterval(() => moveSlide(1), 8000);
     </script>
-    
 </body>
 </html>

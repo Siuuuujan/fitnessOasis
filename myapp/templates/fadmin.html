@@ -20,7 +20,6 @@
             <button onclick="showCard('services')">Add Services</button>
             <button onclick="showCard('trainers')">Add Trainers</button>
             <button onclick="showCard('available_trainers')">Available Trainers</button>
-            <button onclick="showCard('slots_month')">Training Slots</button>
             <button onclick="showCard('revenue')">Total Revenue</button>
             <button onclick="showCard('contacts')">Contact Messages</button>
             <a href="{% url 'admin_logout' %}">
@@ -197,6 +196,10 @@
                                             <td>{{ booking.user.username }}</td>
                                         </tr>
                                     {% endif %}
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="6" class="text-center">No Yoga bookings found.</td>
+                                    </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
@@ -217,7 +220,7 @@
                             </thead>
                             <tbody>
                                 {% for booking in paid_bookings %}
-                                    {% if booking.service.name == 'Cross Fit' %}
+                                    {% if booking.service.name == 'Crossfit' %}
                                         <tr>
                                             <td>{{ booking.trainer.name }}</td>
                                             <td>{{ booking.start_date }}</td>
@@ -280,14 +283,6 @@
                 </form>
             </div>
 
-            <div id="slots_month" class="card">
-                <h2>Training Slots Overview</h2>
-                <div class="booking-section">
-                    <p>Total Slots This Month: {{ slots_per_month }}</p>
-                    <p>Total Slots This Week: {{ slots_per_week }}</p>
-                </div>
-            </div>
-
             <div id="revenue" class="card">
                 <h2>Total Revenue</h2>
                 <div class="booking-section">
@@ -301,41 +296,19 @@
                             </tr>
                         </thead>
                         <tbody>
+                            {% for service_name, data in service_revenue_data.items %}
                             <tr>
-                                <td>Gym</td>
-                                <td>Rs.{{ gym_revenue|floatformat:2 }}</td>
-                                <td>{{ gym_bookings }}</td>
-                                <td>Rs.{{ gym_average|floatformat:2 }}</td>
+                                <td>{{ service_name }}</td>
+                                <td>Rs.{{ data.total_revenue|floatformat:2 }}</td>
+                                <td>{{ data.total_bookings }}</td>
+                                <td>Rs.{{ data.average_per_booking|floatformat:2 }}</td>
                             </tr>
-                            <tr>
-                                <td>CrossFit</td>
-                                <td>Rs.{{ CrossFit_revenue|floatformat:2 }}</td>
-                                <td>{{ CrossFit_bookings }}</td>
-                                <td>Rs.{{ CrossFit_average|floatformat:2 }}</td>
-                            </tr>
-                            <tr>
-                                <td>Martial Arts</td>
-                                <td>Rs.{{ martial_revenue|floatformat:2 }}</td>
-                                <td>{{ martial_bookings }}</td>
-                                <td>Rs.{{ martial_average|floatformat:2 }}</td>
-                            </tr>
-                            <tr>
-                                <td>Yoga</td>
-                                <td>Rs.{{ Yoga_revenue|floatformat:2 }}</td>
-                                <td>{{ Yoga_bookings }}</td>
-                                <td>Rs.{{ Yoga_average|floatformat:2 }}</td>
-                            </tr>
-                            <tr>
-                                <td>Zumba</td>
-                                <td>Rs.{{ Zumba_revenue|floatformat:2 }}</td>
-                                <td>{{ Zumbal_bookings }}</td>
-                                <td>Rs.{{ Zumba_average|floatformat:2 }}</td>
-                            </tr>
+                            {% endfor %}
                             <tr class="total-row">
                                 <td><strong>Total</strong></td>
                                 <td><strong>Rs.{{ total_revenue|floatformat:2 }}</strong></td>
                                 <td><strong>{{ total_bookings }}</strong></td>
-                                <td><strong>Rs.{{ total_average|floatformat:2 }}</strong></td>
+                                <td><strong>Rs.{{ total_revenue|floatformat:2 }}</strong></td>
                             </tr>
                         </tbody>
                     </table>

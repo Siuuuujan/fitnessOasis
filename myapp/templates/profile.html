@@ -23,6 +23,7 @@
                 <ul>
                     <li><a href="#security">🔒 Security & Customization</a></li>
                     <li><a href="#preferences">⚙️ Preferences</a></li>
+                    <li><a href="#history">📜 Transaction History</a></li>
                 </ul>
                 <form action="{% url 'logout' %}" method="POST">
                     {% csrf_token %}
@@ -32,6 +33,7 @@
         </aside>
 
         <main class="content">
+            <!-- Security Section -->
             <section id="security">
                 <h2>🔒 Security & Customization</h2>
                 <p>Update your password, profile picture, and personal settings.</p>
@@ -51,6 +53,7 @@
                 </form>
             </section>
 
+            <!-- Preferences Section -->
             <section id="preferences">
                 <h2>⚙️ Preferences</h2>
                 <p>Set your fitness goals and personalize your experience.</p>
@@ -59,7 +62,6 @@
 
                     <label for="profile_picture">Profile Picture:</label>
                     <input type="file" name="profile_picture" accept="image/*"><br>
-
 
                     <label for="fitness_goal">Select Your Fitness Goal:</label>
                     <select name="fitness_goal">
@@ -85,7 +87,6 @@
                     <label for="weight">Weight (kg):</label>
                     <input type="number" step="0.1" name="weight" value="{{ profile.weight }}"><br>
 
-                    <!-- Fix Gender Dropdown Values -->
                     <label for="gender">Gender:</label>
                     <select name="gender">
                         <option value="Male" {% if profile.gender == "Male" %}selected{% endif %}>Male</option>
@@ -95,6 +96,47 @@
 
                     <button type="submit" name="update_profile">Save Preferences</button>
                 </form>
+            </section>
+
+            <!-- Transaction History Section -->
+            <section id="history">
+                <h2>📜 Transaction History</h2>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Service</th>
+                            <th>Trainer</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Time Slot</th>
+                            <th>Price</th>
+                            <th>Payment Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for booking in bookings %}
+                        <tr>
+                            <td>{{ booking.service.name }}</td>
+                            <td>{{ booking.trainer.name }}</td>
+                            <td>{{ booking.start_date }}</td>
+                            <td>{{ booking.end_date }}</td>
+                            <td>{{ booking.get_time_slot_display }}</td>
+                            <td>NPR {{ booking.price }}</td>
+                            <td>
+                                {% if booking.paid %}
+                                    <span class="text-success">Paid</span>
+                                {% else %}
+                                    <span class="text-danger">Unpaid</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center">No transactions found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </section>
         </main>
     </div>
