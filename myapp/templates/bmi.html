@@ -1,188 +1,209 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BMI Calculator</title>
+    <title>BMI Calculator with Gauge Meter</title>
+
+    
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e0f7fa;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .nav-bar {
+            display: flex;
+            width: 100%;
+            justify-content: start;
+        }
+        .logo {
+            margin: 10px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center; /* Center the logo vertically */
+            justify-content: center; /* Center the logo horizontally */
+            height: 100%; /* Make sure the logo container takes up full height of the navbar */
+        }
+        .logo img {
+            width:120px;
+            object-fit: contain;
+        }
+        .container {
+            display: flex;
+            width: 80%;
+            max-width: 900px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            align-items: center;
+        }
+
+        /* Gauge Container */
+        .gauge-container {
+            flex: 1;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .gauge-background {
+            width: 300px;
+            height: auto;
+        }
+
+        .gauge-arrow {
+            position: absolute;
+            bottom: 10%; /* Adjusted to align needle properly */
+            left: 50%;
+            width: 8px;
+            height: 100px;
+            background-color: rgb(0, 0, 0);
+            transform-origin: bottom center;
+            transform: translateX(-50%) rotate(-45deg); /* Default to underweight */
+            transition: transform 0.5s ease-in-out;
+        }
+
+        /* BMI Form Styling */
+        .bmi-form-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        form {
+            width: 100%;
+            max-width: 300px;
+        }
+
+        form label {
+            font-size: 18px;
+            color: #00796b;
+            margin: 10px 0 5px;
+        }
+
+        form input {
+            padding: 10px;
+            font-size: 16px;
+            width: 100%;
+            border-radius: 8px;
+            border: 2px solid #00796b;
+            text-align: center;
+        }
+
+        form button {
+            background-color: #00796b;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        form button:hover {
+            background-color: #004d40;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #00796b;
+            text-align: center;
+        }
+
+    </style>
 </head>
-<style>
-    body {
-    font-family: 'Arial', sans-serif;
-    background-color: #e0f7fa; /* Light blue background */
-    color: #333;
-    margin: 0;
-    padding: 0;
-}
-
-h1 {
-    text-align: center;
-    margin-top: 40px;
-    font-size: 40px;
-    color: #01579b; /* Deep blue */
-    font-weight: 700;
-}
-
-.container {
-    width: 80%;
-    margin: 0 auto;
-    padding: 40px 20px;
-    background-color: #fff;
-    border-radius: 15px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-    margin-top: 20px;
-}
-
-.profile-info {
-    margin-bottom: 30px;
-}
-
-.profile-info h2 {
-    font-size: 28px;
-    color: #00796b; /* Deep green color */
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.profile-info p {
-    font-size: 18px;
-    line-height: 1.8;
-    margin: 10px 0;
-}
-
-.profile-info p strong {
-    color: #00796b; /* Matching green */
-    font-weight: 600;
-}
-
-h3 {
-    color: #00796b;
-    font-size: 24px;
-    margin-top: 20px;
-    text-align: center;
-}
-
-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 20px;
-}
-
-form label {
-    font-size: 18px;
-    margin-bottom: 5px;
-    color: #00796b;
-}
-
-form input {
-    padding: 12px;
-    font-size: 16px;
-    margin-bottom: 15px;
-    width: 80%;
-    max-width: 400px;
-    border-radius: 8px;
-    border: 2px solid #00796b;
-    background-color: #f1f1f1;
-}
-
-form button {
-    background-color: #00796b;
-    color: white;
-    padding: 12px 30px;
-    font-size: 16px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-form button:hover {
-    background-color: #004d40; /* Darker green */
-}
-
-.result {
-    background-color: #f0f4f4;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    margin-top: 20px;
-}
-
-.result p {
-    font-size: 20px;
-    font-weight: bold;
-    text-align: center;
-    margin: 10px 0;
-}
-
-.result p strong {
-    color: #00796b;
-}
-
-/* Media Queries for Responsive Design */
-@media (max-width: 768px) {
-    .container {
-        width: 90%;
-        padding: 20px;
-    }
-
-    h1 {
-        font-size: 32px;
-    }
-
-    h2 {
-        font-size: 24px;
-    }
-
-    h3 {
-        font-size: 20px;
-    }
-
-    form input,
-    form button {
-        width: 100%;
-    }
-
-    .result {
-        padding: 15px;
-    }
-}
-</style>
 <body>
 
-    <h1>BMI Calculator</h1>
+    <div class="nav-bar">
+        <div class="logo">
+            <a href="{% url 'homepage' %}"><img src="{% static 'images/logo.png' %}" alt=""></a>
+        </div>
+    </div>
 
     <div class="container">
-        <div class="profile-info">
-            <h2>Profile Information</h2>
-            <p><strong>Name:</strong> {{ profile.user.first_name }} {{ profile.user.last_name }}</p>
-            <p><strong>Height:</strong> {{ profile.height }} cm</p>
-            <p><strong>Weight:</strong> {{ profile.weight }} kg</p>
-            <p><strong>Gender:</strong> {{ profile.gender }}</p>
+        <!-- Gauge Meter on the Left -->
+        <div class="gauge-container">
+            <img src="{% static 'images/BMI.png' %}" alt="BMI Gauge" class="gauge-background">
+            <div class="gauge-arrow" id="gaugeArrow"></div>
+        </div>
 
-            <h2>Calculate Your BMI and Ideal Weight</h2>
+        <!-- BMI Form on the Right -->
+        <div class="bmi-form-container">
+            <h1>BMI Calculator</h1>
 
-            <form method="post">
-                {% csrf_token %}
+            <div class="profile-info">
+                <h2>Profile Information</h2>
+                <p><strong>Name:</strong> {{ profile.user.first_name }} {{ profile.user.last_name }}</p>
+                <p><strong>Height:</strong> {{ profile.height }} cm</p>
+                <p><strong>Weight:</strong> {{ profile.weight }} kg</p>
+                <p><strong>Gender:</strong> {{ profile.gender }}</p>
+    
+            <form id="bmiForm">
                 <label for="weight">Weight (kg):</label>
-                <input type="text" id="weight" name="weight" required><br><br>
+                <input type="number" id="weight" required>
+
                 <label for="height">Height (cm):</label>
-                <input type="text" id="height" name="height" required><br><br>
-                <button type="submit">Calculate</button>
+                <input type="number" id="height" required>
+
+                <button type="button" onclick="calculateBMI()">Calculate</button>
             </form>
 
+            <div class="result" id="bmiResult"></div>
         </div>
-
-        {% if bmi %}
-        <div class="result">
-            <h3>Results</h3>
-            <p><strong>Your BMI:</strong> {{ bmi|floatformat:2 }}</p>
-            <p><strong>Classification:</strong> {{ classification }}</p>
-            <p><strong>Ideal Weight (BMI 22):</strong> {{ ideal_weight|floatformat:2 }} kg</p>
-        </div>
-        {% endif %}
-        
     </div>
+
+    <script>
+        function calculateBMI() {
+            let weight = parseFloat(document.getElementById("weight").value);
+            let height = parseFloat(document.getElementById("height").value) / 100;
+
+            if (!weight || !height) {
+                alert("Please enter valid weight and height values.");
+                return;
+            }
+
+            let bmi = weight / (height * height);
+            let category = "";
+            let rotation = 0;
+
+            if (bmi < 18.5) {
+                category = "Underweight";
+                rotation = -45;
+            } else if (bmi >= 18.5 && bmi < 25) {
+                category = "Normal";
+                rotation = -20;
+            } else if (bmi >= 25 && bmi < 30) {
+                category = "Overweight";
+                rotation = 10;
+            } else if (bmi >= 30 && bmi < 35) {
+                category = "Obese";
+                rotation = 40;
+            } else {
+                category = "Extremely Obese";
+                rotation = 70;
+            }
+
+            document.getElementById("bmiResult").innerHTML = `Your BMI: ${bmi.toFixed(2)}<br>Classification: ${category}`;
+            document.getElementById("gaugeArrow").style.transform = `translateX(-50%) rotate(${rotation}deg)`;
+        }
+    </script>
 
 </body>
 </html>

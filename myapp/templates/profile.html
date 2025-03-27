@@ -111,6 +111,7 @@
                             <th>Time Slot</th>
                             <th>Price</th>
                             <th>Payment Status</th>
+                            <th>Action</th> <!-- New column for the Print Receipt button -->
                         </tr>
                     </thead>
                     <tbody>
@@ -129,10 +130,22 @@
                                     <span class="text-danger">Unpaid</span>
                                 {% endif %}
                             </td>
+                            <td>
+                                <button onclick="printReceipt(this)" class="print-btn" 
+                                        data-service="{{ booking.service.name }}"
+                                        data-trainer="{{ booking.trainer.name }}"
+                                        data-start-date="{{ booking.start_date }}"
+                                        data-end-date="{{ booking.end_date }}"
+                                        data-time-slot="{{ booking.get_time_slot_display }}"
+                                        data-price="{{ booking.price }}"
+                                        data-paid="{{ booking.paid }}">
+                                    Print Receipt
+                                </button>
+                            </td>
                         </tr>
                         {% empty %}
                         <tr>
-                            <td colspan="7" class="text-center">No transactions found.</td>
+                            <td colspan="8" class="text-center">No transactions found.</td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -164,7 +177,79 @@
 
             // Show only the first section on page load
             showSection("security");
+
         });
+
+        function printReceipt(button) {
+    // Retrieve booking details from data attributes
+    const booking = {
+        service: button.getAttribute("data-service"),
+        trainer: button.getAttribute("data-trainer"),
+        startDate: button.getAttribute("data-start-date"),
+        endDate: button.getAttribute("data-end-date"),
+        timeSlot: button.getAttribute("data-time-slot"),
+        price: button.getAttribute("data-price"),
+        paid: button.getAttribute("data-paid") === "True" // Convert string to boolean
+    };
+
+    // Debugging: Log the booking object
+    console.log("Booking Details:", booking);
+
+    // Open a new window with the receipt template
+    const receiptWindow = window.open("", "Receipt", "width=600,height=600");
+    receiptWindow.document.write(`
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Booking Receipt</title>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    margin: 20px;
+                }
+                .receipt {
+                    border: 1px solid #ccc;
+                    padding: 20px;
+                    max-width: 400px;
+                    margin: 0 auto;
+                    background-color: #f9f9f9;
+                }
+                .receipt h2 {
+                    text-align: center;
+                    color: #333;
+                }
+                .receipt p {
+                    margin: 10px 0;
+                }
+                .receipt .label {
+                    font-weight: bold;
+                }
+                @media print {
+                    .print-btn {
+                        display: none;
+                    }
+                }
+            </style>
+        </head>
+        <body>
+            <div class="receipt">
+                <h2>Booking Receipt</h2>
+                <p><span class="label">Service:</span> ${booking.service}</p>
+                <p><span class="label">Trainer:</span> ${booking.trainer}</p>
+                <p><span class="label">Start Date:</span> ${booking.startDate}</p>
+                <p><span class="label">End Date:</span> ${booking.endDate}</p>
+                <p><span class="label">Time Slot:</span> ${booking.timeSlot}</p>
+                <p><span class="label">Price:</span> NPR ${booking.price}</p>
+                <p><span class="label">Payment Status:</span> ${booking.paid ? "Paid" : "Unpaid"}</p>
+                <button onclick="window.print()" class="print-btn">Print Receipt</button>
+            </div>
+        </body>
+        </html>
+    `);
+    receiptWindow.document.close();
+}
     </script>
 </body>
 </html>

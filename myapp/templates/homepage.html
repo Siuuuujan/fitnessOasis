@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fitness Oasis</title>
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
     <!-- Background Image -->
@@ -27,7 +28,7 @@
                 {% if user.is_authenticated %}
                     <a href="{% url 'profile' %}">
                         <div class="profile">
-                            <img src="{% if profile.profile_picture %}{{ profile.profile_picture.url }}{% else %}{% static 'images/default-profile.png' %}{% endif %}" 
+                            <img src="{% if profile and profile.profile_picture %}{{ profile.profile_picture.url }}{% else %}{% static 'images/default-profile.png' %}{% endif %}" 
                                  class="profile-pic" 
                                  alt="Profile Picture">
                         </div>
@@ -48,9 +49,10 @@
                 <p>At Fitness Oasis, we believe that fitness is a journey, not a destination. Our membership offers you all the tools, support, and motivation you need to build strength, endurance, and confidence. Whether you're here to tone up, lose weight, or push your limits, we've got you covered.</p>
             </div>
 
-            {% if user.is_authenticated %}
+            <div class="two-section">
+                {% if user.is_authenticated %}
                 <!-- Recommendations Section -->
-                <div class="recommendation">
+                <div class="recommendation" style="width: 65%;">
                     <div class="for-you">Recommendations For You</div>
                     <div class="fy-slider">
                         <div class="slider-container">
@@ -58,8 +60,8 @@
                             <div class="slide">
                                 <div class="slide-content">
                                     <h3>Meal Plans</h3>
-                                    <p>{{ meal_plan }}</p>
-                                    {% if meal_plan and "Set your preferences" not in meal_plan %}
+                                    <p>{{ meal_plan|default:"Complete your profile to get personalized meal plans" }}</p>
+                                    {% if profile and meal_plan and "Set your preferences" not in meal_plan %}
                                         <p><a href="{% url 'meal_plan_detail' %}">See more...</a></p>
                                     {% else %}
                                         <p><a href="{% url 'profile' %}" class="profile-link">Set your preferences</a></p>
@@ -71,8 +73,8 @@
                             <div class="slide">
                                 <div class="slide-content">
                                     <h3>Workout Plans</h3>
-                                    <p>{{ workout_plan }}</p>
-                                    {% if workout_plan and "Set your preferences" not in workout_plan %}
+                                    <p>{{ workout_plan|default:"Complete your profile to get workout recommendations" }}</p>
+                                    {% if profile and workout_plan and "Set your preferences" not in workout_plan %}
                                         <p><a href="{% url 'workout_plan_detail' %}">See more...</a></p>
                                     {% else %}
                                         <p><a href="{% url 'profile' %}" class="profile-link">Set your preferences</a></p>
@@ -84,8 +86,8 @@
                             <div class="slide">
                                 <div class="slide-content">
                                     <h3>Hydration Plans</h3>
-                                    <p>{{ hydration_plan }}</p>
-                                    {% if not profile.weight %}
+                                    <p>{{ hydration_plan|default:"Stay hydrated for optimal performance!" }}</p>
+                                    {% if profile and not profile.weight %}
                                         <p><a href="{% url 'profile' %}" class="profile-link">Update your weight</a></p>
                                     {% endif %}
                                 </div>
@@ -107,7 +109,6 @@
                                 <p><strong>Time Slot:</strong> {{ booking.time_slot }}</p>
                                 <p><strong>Duration:</strong> {{ booking.start_date|date:"M d" }} - {{ booking.end_date|date:"M d" }}</p>
                                 <p><strong>Price:</strong> Rs. {{ booking.price|floatformat:"0" }}</p>
-                                <!-- Buy Package Button -->
                                 <a href="{% url 'book' %}?service={{ booking.service.name|urlencode }}" class="btn btn-primary">
                                     Buy Package
                                 </a>
@@ -126,65 +127,131 @@
                 </div>
             {% else %}
                 <!-- Guest Message -->
-                <div class="guest-message">
-                    <p>Ready to start your fitness journey? <a href="{% url 'register' %}">Register now</a> or <a href="{% url 'login' %}">log in</a> to get personalized recommendations!</p>
-                </div>
+                <section class="guest-message">
+                    <div class="guest-content">
+                        <h3>Ready to start your fitness journey?</h3>
+                        <div class="guest-buttons">
+                            <a href="{% url 'register' %}" class="btn btn-primary">
+                                <i class="fas fa-user-plus"></i> Register Now
+                            </a>
+                            <a href="{% url 'login' %}" class="btn btn-secondary">
+                                <i class="fas fa-sign-in-alt"></i> Log In
+                            </a>
+                        </div>
+                    </div>
+                </section>
             {% endif %}
 
+            </div>
+
             <!-- Quick Links -->
-            <div class="three-content">
-                <div class="our-services" id="servicesBtn">
-                    <img src="{% static 'images/services.png' %}" alt="Services">
-                    <h1>Services</h1>
+            <section class="three-content">
+                <a href="{% url 'services' %}" style="text-decoration: none; color: white;">
+                    <div class="our-services" id="servicesBtn">
+                        <div class="quick-link-icon">
+                            <i class="fas fa-dumbbell fa-3x"></i>
+                        </div>
+                        <h2>Our Services</h2>
+                        <p>Explore our fitness programs</p>
+                    </div>
+                </a>
+                <a href="{% url 'trainers' %}" style="text-decoration: none; color: white;">
+                    <div class="our-trainers" id="trainersBtn">
+                        <div class="quick-link-icon">
+                            <i class="fas fa-user-tie fa-3x"></i>
+                        </div>
+                        <h2>Our Trainers</h2>
+                        <p>Meet our expert coaches</p>
+                    </div>
+                </a>
+                <a href="{% url 'bmi' %}" style="text-decoration: none; color: white;">
+                    <div class="our-timetable" id="timetableBtn">
+                        <div class="quick-link-icon">
+                            <i class="fas fa-calculator fa-3x"></i>
+                        </div>
+                        <h2>BMI Calculator</h2>
+                        <p>Check your body mass index</p>
+                    </div>
+                </a>
+            </section>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="{% url 'homepage' %}">Home</a></li>
+                        <li><a href="{% url 'services' %}">Services</a></li>
+                        <li><a href="{% url 'trainers' %}">Trainers</a></li>
+                        <li><a href="{% url 'contact' %}">Contact Us</a></li>
+                    </ul>
                 </div>
-                <div class="our-trainers" id="trainersBtn">
-                    <img src="{% static 'images/trainers.png' %}" alt="Trainers">
-                    <h1>Trainers</h1>
+                <div class="footer-section">
+                    <h4>Contact Info</h4>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> RaksiBhatti, Kathmandu, Nepal</li>
+                        <li><i class="fas fa-phone"></i> +977 9876543210</li>
+                        <li><i class="fas fa-envelope"></i> info@fitnessoasis.com</li>
+                    </ul>
                 </div>
-                <div class="our-timetable" id="timetableBtn">
-                    <img src="{% static 'images/timetable.webp' %}" alt="BMI Calculator">
-                    <h1>BMI Calculator</h1>
+                <div class="footer-section">
+                    <h4>Follow Us</h4>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </div>
                 </div>
             </div>
-        </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Fitness Oasis. All Rights Reserved.</p>
+            </div>
+        </footer>
     </div>
 
-    <!-- Footer -->
-    <footer>
-        <p class="text-center">&copy; 2025 Fitness Oasis. All Rights Reserved.</p>
-    </footer>
-
     <!-- JavaScript -->
+    <script src="{% static 'scripts.js' %}"></script>
     <script>
-        // Slider Functionality
-        let currentIndex = 0;
+        // Slider functionality only if slides exist
         const slides = document.querySelectorAll('.slide');
-        const totalSlides = slides.length;
+        if (slides.length > 0) {
+            let currentSlide = 0;
+            
+            function showSlide(n) {
+                slides.forEach(slide => slide.style.display = 'none');
+                currentSlide = (n + slides.length) % slides.length;
+                slides[currentSlide].style.display = 'block';
+            }
 
-        function moveSlide(step) {
-            currentIndex = (currentIndex + step + totalSlides) % totalSlides;
-            document.querySelector('.slider-container').style.transform = 
-                `translateX(-${currentIndex * 100}%)`;
+            function moveSlide(delta) {
+                showSlide(currentSlide + delta);
+            }
+
+            // Initialize slider
+            showSlide(0);
+            
+            // Auto-advance slides every 5 seconds
+            setInterval(() => moveSlide(1), 5000);
+
+            // Add keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft') moveSlide(-1);
+                if (e.key === 'ArrowRight') moveSlide(1);
+            });
         }
 
-        // Event Listeners
-        document.addEventListener('DOMContentLoaded', () => {
-            // Quick Links
-            document.getElementById('servicesBtn').addEventListener('click', () => {
-                window.location.href = "{% url 'services' %}";
+        // Quick links hover effect
+        document.querySelectorAll('.three-content div').forEach(link => {
+            link.addEventListener('mouseover', () => {
+                link.style.transform = 'scale(1.05)';
+                link.style.transition = 'transform 0.3s ease';
             });
-
-            document.getElementById('trainersBtn').addEventListener('click', () => {
-                window.location.href = "{% url 'trainers' %}";
-            });
-
-            document.getElementById('timetableBtn').addEventListener('click', () => {
-                window.location.href = "{% url 'bmi' %}";
+            link.addEventListener('mouseout', () => {
+                link.style.transform = 'scale(1)';
             });
         });
-
-        // Auto-advance slider every 8 seconds
-        setInterval(() => moveSlide(1), 8000);
     </script>
 </body>
 </html>

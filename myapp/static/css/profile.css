@@ -1,3 +1,4 @@
+/* General Styles */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -7,14 +8,16 @@ body {
 
 .dashboard-container {
     display: flex;
-    height: 100vh;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 .sidebar {
-    width: 250px;
+    width: 100%;
     background-color: #333;
     color: white;
     padding: 20px;
+    box-sizing: border-box;
 }
 
 .profile-header {
@@ -23,7 +26,7 @@ body {
 }
 
 #logo-img {
-    width:120px;
+    width: 120px;
     object-fit: contain;
 }
 
@@ -67,6 +70,9 @@ nav ul li a:hover {
     color: white;
     border-radius: 5px;
     text-decoration: none;
+    border: none;
+    cursor: pointer;
+    width: 100%;
 }
 
 .logout-btn:hover {
@@ -79,6 +85,7 @@ nav ul li a:hover {
     background: white;
     border-radius: 10px;
     margin: 20px;
+    box-sizing: border-box;
 }
 
 h2 {
@@ -95,6 +102,7 @@ input, textarea, select, button {
     margin-top: 5px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    box-sizing: border-box;
 }
 
 button {
@@ -185,4 +193,92 @@ button:hover {
     text-align: center;
     font-style: italic;
     color: #666666;
+}
+
+/* Responsive Design */
+@media (min-width: 768px) {
+    .dashboard-container {
+        flex-direction: row;
+    }
+
+    .sidebar {
+        width: 250px;
+        height: 100vh;
+        position: fixed;
+    }
+
+    .content {
+        margin-left: 270px; /* Sidebar width + margin */
+        width: calc(100% - 270px);
+    }
+}
+
+@media (max-width: 767px) {
+    .table th,
+    .table td {
+        padding: 8px;
+        font-size: 12px;
+    }
+
+    .table th {
+        font-size: 12px;
+    }
+
+    .profile-pic {
+        width: 60px;
+        height: 60px;
+    }
+
+    #logo-img {
+        width: 100px;
+    }
+
+    .content {
+        margin: 10px;
+        padding: 10px;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+
+    button {
+        padding: 8px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .table th,
+    .table td {
+        padding: 6px;
+        font-size: 10px;
+    }
+
+    .table th {
+        font-size: 10px;
+    }
+
+    .profile-pic {
+        width: 50px;
+        height: 50px;
+    }
+
+    #logo-img {
+        width: 80px;
+    }
+
+    .content {
+        margin: 5px;
+        padding: 5px;
+    }
+
+    h2 {
+        font-size: 18px;
+    }
+
+    button {
+        padding: 6px;
+        font-size: 12px;
+    }
 }

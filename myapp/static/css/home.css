@@ -1,600 +1,399 @@
+/* static/css/home.css */
+
+/* Base Styles */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
-
-html, body {
-    height: 100%;  /* Full height for both HTML and body */
-    margin: 0;     /* Remove default margin */
-    padding: 0;    /* Remove default padding */
-    display: flex; /* Flexbox container */
-    flex-direction: column; /* Stack content vertically */
+    font-family: 'Arial', sans-serif;
 }
 
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
-    align-items: center;
-}
-
-.main {
-    flex: 1; /* Allow the content to take up the remaining space */
-    width: 100%;
-    height: auto;  /* Allow the content to grow */
-    background-color: rgba(0, 255, 255, 0.027); 
-    cursor: auto;
+    background-color: #1a1a1a;
+    color: #ffffff;
+    line-height: 1.6;
 }
 
 #background-img {
-    position: fixed; /* Fixed to stay in place during scrolling */
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Ensures the image covers the entire viewport */
-    z-index: -1; /* Places the image behind other content */
+    object-fit: cover;
+    z-index: -1;
+    opacity: 0.4;
 }
 
-.nav-bar {
-    width: 97%;
-    height: 10%;
-    padding: 15px;
+.main {
+    min-height: 100vh;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+}
+
+/* Navigation Bar */
+.nav-bar {
+    background: rgba(0, 0, 0, 0.8);
+    padding: 1rem 2rem;
+    display: flex;
     justify-content: space-between;
     align-items: center;
-    overflow: hidden;
-}
-
-.logo {
-    margin: 10px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center; /* Center the logo vertically */
-    justify-content: center; /* Center the logo horizontally */
-    height: 100%; /* Make sure the logo container takes up full height of the navbar */
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
 .logo img {
-    width: 120px;
-    object-fit: contain;
+    height: 50px;
 }
 
 .navbar-contents {
-    font-size: 1.2rem;
-    margin: 20px;
-    margin-bottom: 0px;
     display: flex;
-    flex-direction: row;
     align-items: center;
-    gap: 2vw;
+    gap: 2rem;
 }
 
 .navbar-contents a {
+    color: #ffffff;
     text-decoration: none;
-    color: white;
+    transition: color 0.3s ease;
 }
 
-/* General Button Style */
-.login-btn {
-    background-color: #294f77; /* Blue color */
-    color: white;
-    font-size: 16px;
-    width: 60px;
-    height: 35px;
-    padding: 4px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: 0.3s ease-in-out;
-    text-decoration: none;
-}
-
-/* Hover Effect */
-.login-btn:hover {
-    background-color: #0056b3; /* Darker blue */
-}
-
-.profile {
-    width: 60px; /* Adjust size as needed */
-    height: 60px;
-    border-radius: 50%;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 2px solid #fff; /* White border */
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease-in-out;
-}
-
-.profile:hover {
-    transform: scale(1.1);
+.navbar-contents a:hover {
+    color: #00ff88;
 }
 
 .profile-pic {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* Ensures the image fits well */
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
-
-.hero {
-    width: 75%;
-    height: 25vh;
-    margin-top: 5vh;
-    padding: 10px;
-    backdrop-filter: blur(2px);
-    border-radius: 30px;
-    color: white;
-    justify-self: center;
-    align-self: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    font-size: 2rem;
-    font-weight: bold;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-}
-
-.hero p {
-    font-size: 1.4rem;
-    font-weight: normal;
-    text-align: center;
-}
-
-.three-content {
-    margin-top: 5vh;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-}
-
-.our-services, .our-trainers, .our-timetable {
-    width: 25%;
-    height: 35vh;
-    display: flex;
-    flex-direction: column; /* Stack the heading and image vertically */
-    align-items: center;
-    text-align: center;
+.login-btn {
+    background: #00ff88;
+    color: #1a1a1a;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
     cursor: pointer;
-    margin-bottom: 10vh;
+    font-weight: bold;
 }
 
-.our-services h1, .our-trainers h1, .our-timetable h1 {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-    color: white;
-}
-
-.our-services img, .our-trainers img, .our-timetable img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    border-radius: 20px;
-}
-
-footer {
-    width: 100%;
-    background-color: #343a40;
-    color: white;
-    padding: 10px 0;
+/* Hero Section */
+.hero {
     text-align: center;
-    position: relative;
-    bottom: 0;
+    padding: 4rem 2rem;
+    margin: 2rem;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 10px;
 }
 
+.hero h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #00ff88;
+}
+
+/* Recommendations Section */
 .recommendation {
-    background-color: #212121; /* Dark gray background */
-    padding: 30px 0;
+    padding: 2rem;
+    margin: 2rem;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 10px;
+}
+
+/* Add this to your home.css file */
+.login-message {
+    background: rgba(0, 255, 136, 0.1);
+    color: #00ff88;
     text-align: center;
-    border-radius: 20px;
-    margin: 20px auto;
-    width: 80%;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Darker shadow for a stronger gym feel */
-    font-family: 'Arial', sans-serif;
+    padding: 1.5rem;
+    margin: 1rem 1rem;
+    border-radius: 8px;
+    border: 1px solid rgba(0, 255, 136, 0.2);
+    max-width: 600px;
+    font-size: 1.1rem;
+    animation: fadeIn 0.5s ease-in;
+    backdrop-filter: blur(5px);
+}
+
+.login-message a {
+    color: #00ff88;
+    text-decoration: none;
+    font-weight: bold;
+    border-bottom: 1px dotted rgba(0, 255, 136, 0.5);
+    transition: all 0.3s ease;
+}
+
+.login-message a:hover {
+    color: #ffffff;
+    border-bottom-color: #00ff88;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Add to mobile responsive section */
+@media (max-width: 768px) {
+    .login-message {
+        margin: 1rem;
+        padding: 1rem;
+        font-size: 1rem;
+    }
 }
 
 .for-you {
-    font-size: 24px;
+    color: #00ff88;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
     font-weight: bold;
-    color: #ff5722; /* Vibrant orange for energy */
-    margin-bottom: 20px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
 }
 
+/* Slider Styles */
 .fy-slider {
     position: relative;
     overflow: hidden;
-    border-radius: 15px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Stronger shadow for depth */
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
 }
 
 .slider-container {
     display: flex;
-    transition: transform 0.5s ease;
-    padding: 0;
-    margin: 0;
+    transition: transform 0.5s ease-in-out;
 }
 
 .slide {
     min-width: 100%;
-    background-color: #333; /* Dark background for each slide */
-    padding: 20px;
-    border-radius: 15px;
-    text-align: center;
+    padding: 1.5rem;
     box-sizing: border-box;
-    margin: 0;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Darker shadow to match gym vibe */
+}
+
+.slide-content {
+    background: rgba(0, 0, 0, 0.6);
+    padding: 2rem;
+    border-radius: 10px;
+    text-align: center;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .slide-content h3 {
-    color: #ff5722; /* Vibrant orange for headings */
-    font-size: 22px;
-    font-weight: bold;
+    color: #00ff88;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
 }
 
 .slide-content p {
-    color: #fff; /* White text for better readability */
-    font-size: 16px;
-    margin: 10px 0;
-}
-
-.slide-content a {
-    text-decoration: none;
-    color: #ff5722;
-}
-.slide-content a:hover {
-    color: rgb(255, 234, 46);
-}
-.slide-content a:active {
-    color: rgb(88, 255, 46);
-}
-
-.slide-content p:first-child {
-    font-weight: bold;
-}
-
-.slide-content p:last-child {
-    color: #03a9f4; /* Blue for "Join Now" button */
-    font-weight: bold;
-    cursor: pointer;
-    transition: color 0.3s;
-}
-
-.slide-content p:last-child:hover {
-    color: #ff9800; /* Orange hover effect for call-to-action */
+    color: #ffffff;
+    font-size: 1.1rem;
+    margin: 1rem 0;
+    line-height: 1.6;
 }
 
 .prev, .next {
-    background-color: #ff5722; /* Orange for buttons */
-    color: #fff;
-    font-size: 24px;
-    border: none;
-    padding: 10px;
-    border-radius: 50%;
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
+    background: rgba(0, 255, 136, 0.2);
+    color: #00ff88;
+    border: none;
+    padding: 1rem;
     cursor: pointer;
-    transition: background-color 0.3s;
+    font-size: 1.5rem;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
 }
 
 .prev:hover, .next:hover {
-    background-color: #e64a19; /* Darker orange on hover */
+    background: rgba(0, 255, 136, 0.3);
+    transform: translateY(-50%) scale(1.1);
 }
 
-.prev {
-    left: 10px;
-}
+.prev { left: 1rem; }
+.next { right: 1rem; }
 
-.next {
-    right: 10px;
-}
-
-@media (max-width: 768px) {
-    .for-you {
-        font-size: 20px;
-    }
-
-    .slide-content h3 {
-        font-size: 20px;
-    }
-
-    .slide-content p {
-        font-size: 14px;
-    }
-}
-
-.login-message {
-    background-color: #263238; /* Dark slate background */
-    color: #ff5722; /* Vibrant orange for text */
-    border: 2px solid #ff9800; /* Orange border */
-    padding: 20px;
-    border-radius: 10px;
-    font-family: 'Arial', sans-serif;
-    font-size: 18px;
-    text-align: center;
-    width: 80%;
-    margin: 20px auto;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-    animation: bounce 1.5s infinite; /* Add a cute bounce animation */
-}
-
-.login-message::before {
-    content: "💪"; /* Flexing bicep emoji */
-    font-size: 24px;
-    margin-right: 10px;
-}
-
-
-
-@keyframes bounce {
-    0%, 20%, 50%, 80%, 100% {
-        transform: translateY(0);
-    }
-    40% {
-        transform: translateY(-10px);
-    }
-    60% {
-        transform: translateY(-5px);
-    }
-}
-
-/* Recommended Packages Section */
-.recommendation {
-    background-color: #212121; /* Dark gray background */
-    padding: 30px 0;
-    text-align: center;
-    border-radius: 20px;
-    margin: 20px auto;
-    width: 80%;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Darker shadow for a stronger gym feel */
-    font-family: 'Arial', sans-serif;
-}
-
-.for-you {
-    font-size: 24px;
-    font-weight: bold;
-    color: #ff5722; /* Vibrant orange for energy */
-    margin-bottom: 20px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-}
-
+/* Packages Section */
 .package-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 1.5rem;
 }
 
 .package-card {
-    background-color: #333; /* Dark background for each card */
-    border-radius: 15px;
-    padding: 20px;
-    width: 300px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Darker shadow to match gym vibe */
-    text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1.5rem;
+    border-radius: 10px;
+    position: relative;
+    transition: transform 0.3s ease;
 }
 
 .package-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5); /* Stronger shadow on hover */
+    transform: translateY(-5px);
 }
 
-.package-card h3 {
-    color: #ff5722; /* Vibrant orange for headings */
-    font-size: 22px;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.package-card p {
-    color: #fff; /* White text for better readability */
-    font-size: 16px;
-    margin: 10px 0;
-}
-
-.package-card .btn {
-    background-color: #ff5722; /* Orange for buttons */
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
-}
-
-.package-card .btn:hover {
-    background-color: #e64a19; /* Darker orange on hover */
-}
-
-/* Modal for Package Details */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
-    justify-content: center;
-    align-items: center;
-}
-
-.modal-content {
-    background-color: #333; /* Dark background for modal */
-    padding: 20px;
-    border-radius: 15px;
-    width: 80%;
-    max-width: 500px;
-    text-align: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Darker shadow to match gym vibe */
-}
-
-.modal-content h2 {
-    color: #ff5722; /* Vibrant orange for headings */
-    font-size: 24px;
-    margin-bottom: 10px;
-}
-
-.modal-content p {
-    color: #fff; /* White text for better readability */
-    font-size: 16px;
-    margin: 10px 0;
-}
-
-.modal-content .close {
-    color: #ff5722; /* Orange for close button */
-    font-size: 24px;
-    font-weight: bold;
-    cursor: pointer;
+.popular-badge {
     position: absolute;
-    top: 10px;
-    right: 20px;
+    top: -10px;
+    right: -10px;
+    background: #00ff88;
+    color: #1a1a1a;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.service-details p {
+    margin: 0.5rem 0;
+    color: #cccccc;
+}
+
+.service-stats p {
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 0.8rem 1.5rem;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: #00ff88;
+    color: #1a1a1a;
+}
+
+.btn-primary:hover {
+    background: #00cc6a;
+}
+
+.btn-secondary {
+    background: #333333;
+    color: #ffffff;
+}
+
+.btn-secondary:hover {
+    background: #444444;
+}
+
+/* Quick Links */
+.three-content {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin: 2rem;
+}
+
+.our-services, .our-trainers, .our-timetable {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2rem;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.three-content div:hover {
+    transform: translateY(-5px);
+}
+
+.quick-link-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #00ff88;
+}
+
+/* Footer */
+footer {
+    background: rgba(0, 0, 0, 0.8);
+    padding: 2rem;
+    margin-top: auto;
+    text-align: center;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-section h4 {
+    color: #00ff88;
+    margin-bottom: 1rem;
+}
+
+.social-icons a {
+    color: #ffffff;
+    margin: 0 0.5rem;
+    font-size: 1.5rem;
     transition: color 0.3s ease;
 }
 
-.modal-content .close:hover {
-    color: #e64a19; /* Darker orange on hover */
+.social-icons a:hover {
+    color: #00ff88;
 }
 
-/* Packages For You Section */
-.packages-recommendation {
-    background-color: #212121; /* Dark gray background */
-    padding: 30px 0;
-    text-align: center;
-    border-radius: 20px;
-    margin: 20px auto;
-    width: 80%;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Darker shadow for a stronger gym feel */
-    font-family: 'Arial', sans-serif;
-}
-
-.packages-for-you {
-    font-size: 24px;
-    font-weight: bold;
-    color: #ff5722; /* Vibrant orange for energy */
-    margin-bottom: 20px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-}
-
-.packages-container {
+.two-section {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-    padding: 20px;
+    flex-direction: row;
 }
 
-.packages-card {
-    background-color: #333; /* Dark background for each card */
-    border-radius: 15px;
-    padding: 20px;
-    width: 300px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Darker shadow to match gym vibe */
-    text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.packages-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5); /* Stronger shadow on hover */
-}
-
-.packages-card h3 {
-    color: #ff5722; /* Vibrant orange for headings */
-    font-size: 22px;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.packages-card p {
-    color: #fff; /* White text for better readability */
-    font-size: 16px;
-    margin: 10px 0;
-}
-
-.packages-card .btn {
-    background-color: #ff5722; /* Orange for buttons */
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
-}
-
-.packages-card .btn:hover {
-    background-color: #e64a19; /* Darker orange on hover */
-}
-
-/* Empty State for Packages Container */
-.packages-container.empty {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 200px; /* Adjust height as needed */
-    background-color: #444; /* Slightly lighter dark background */
-    border-radius: 15px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Consistent shadow */
-    padding: 20px;
-    text-align: center;
-}
-
-.packages-container.empty p {
-    color: #ff5722; /* Vibrant orange for the message */
-    font-size: 18px;
-    font-weight: bold;
-    margin: 0;
-}
-
-/* Responsive Design */
+/* Mobile Responsive */
 @media (max-width: 768px) {
+    .navbar-contents {
+        gap: 1rem;
+    }
+
+    .three-content {
+        grid-template-columns: 1fr;
+    }
+
+    .footer-content {
+        grid-template-columns: 1fr;
+    }
+
     .package-container {
-        flex-direction: column;
-        align-items: center;
+        grid-template-columns: 1fr;
     }
 
-    .package-card {
-        width: 90%;
+    .hero {
+        padding: 2rem 1rem;
+        margin: 1rem;
     }
 
-    .modal-content {
-        width: 90%;
+    .slide-content {
+        padding: 1.5rem;
+        min-height: 250px;
     }
 }
 
 @media (max-width: 480px) {
     .for-you {
-        font-size: 20px;
+        font-size: 1.5rem;
     }
-
-    .package-card h3 {
-        font-size: 20px;
-    }
-
-    .package-card p {
-        font-size: 14px;
-    }
-
-    .modal-content h2 {
-        font-size: 20px;
-    }
-
-    .modal-content p {
-        font-size: 14px;
+    
+    .slide-content {
+        padding: 1rem;
+        min-height: 200px;
     }
 }

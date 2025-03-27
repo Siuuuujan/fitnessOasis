@@ -79,6 +79,7 @@ class Trainer(models.Model):
     available_time_slots = models.JSONField(default=list)
     booked_time_slots = models.JSONField(default=None)
     daily_rate = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
+    is_active = models.BooleanField(default=True)  # New field to check if the trainer is active
 
     def __str__(self):
         return self.name

@@ -1,0 +1,70 @@
+<script>
+    function printReceipt(bookingId) {
+        // Fetch booking details (you can pass this data dynamically from the backend or store it in a data attribute)
+        const booking = {
+            id: bookingId,
+            service: "{{ booking.service.name }}",
+            trainer: "{{ booking.trainer.name }}",
+            startDate: "{{ booking.start_date }}",
+            endDate: "{{ booking.end_date }}",
+            timeSlot: "{{ booking.get_time_slot_display }}",
+            price: "{{ booking.price }}",
+            paid: "{{ booking.paid }}"
+        };
+
+        // Open a new window with the receipt template
+        const receiptWindow = window.open("", "Receipt", "width=600,height=600");
+        receiptWindow.document.write(`
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Booking Receipt</title>
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        margin: 20px;
+                    }
+                    .receipt {
+                        border: 1px solid #ccc;
+                        padding: 20px;
+                        max-width: 400px;
+                        margin: 0 auto;
+                        background-color: #f9f9f9;
+                    }
+                    .receipt h2 {
+                        text-align: center;
+                        color: #333;
+                    }
+                    .receipt p {
+                        margin: 10px 0;
+                    }
+                    .receipt .label {
+                        font-weight: bold;
+                    }
+                    @media print {
+                        .print-btn {
+                            display: none;
+                        }
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="receipt">
+                    <h2>Booking Receipt</h2>
+                    <p><span class="label">Service:</span> ${booking.service}</p>
+                    <p><span class="label">Trainer:</span> ${booking.trainer}</p>
+                    <p><span class="label">Start Date:</span> ${booking.startDate}</p>
+                    <p><span class="label">End Date:</span> ${booking.endDate}</p>
+                    <p><span class="label">Time Slot:</span> ${booking.timeSlot}</p>
+                    <p><span class="label">Price:</span> NPR ${booking.price}</p>
+                    <p><span class="label">Payment Status:</span> ${booking.paid ? "Paid" : "Unpaid"}</p>
+                    <button onclick="window.print()" class="print-btn">Print Receipt</button>
+                </div>
+            </body>
+            </html>
+        `);
+        receiptWindow.document.close();
+    }
+</script>

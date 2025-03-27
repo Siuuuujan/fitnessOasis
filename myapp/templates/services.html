@@ -8,58 +8,79 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/services.css' %}">
     <style>
-        /* Previous styles remain unchanged */
-        /* Add carousel specific fixes */
-        .carousel-item {
-            transition: transform 0.6s ease-in-out;
-        }
-        .carousel-control-prev,
-        .carousel-control-next {
-            width: 5%;
-        }
-        .carousel-indicators [data-bs-target] {
-            background-color: #fff;
-        }
-        /* Style for the custom buttons */
-        .service-buttons {
+        /* Horizontal Scroll Container */
+        .services-container {
             display: flex;
-            justify-content: center;
-            margin-top: 0; /* Move the buttons closer to the carousel */
-            padding: 0;
-            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
-            border-radius: 0 0 15px 15px; /* Rounded corners at the bottom */
-            overflow: hidden; /* Ensure the buttons stay within the container */
+            overflow-x: auto; /* Enable horizontal scrolling */
+            gap: 20px; /* Space between cards */
+            padding-bottom: 20px; /* Add some padding at the bottom */
         }
 
-        /* Service Buttons */
-        .service-buttons button {
-            flex: 1; /* Each button takes equal space */
-            padding: 10px 0;
+        /* Prevent vertical scrolling */
+        .services-container::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .services-container::-webkit-scrollbar-thumb {
             background-color: #ff531f;
-            color: #fff;
-            border: none;
-            border-right: 1px solid rgba(255, 255, 255, 0.3); /* Divider between buttons */
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            font-size: 1rem;
-            font-weight: 600;
-            text-transform: uppercase;
+            border-radius: 4px;
+        }
+
+        .services-container::-webkit-scrollbar-track {
+            background-color: #f1f1f1;
+        }
+
+        /* Card Styles */
+        .service-card {
+            flex: 0 0 auto; /* Prevent cards from shrinking or growing */
+            width: 300px; /* Fixed width for each card */
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .service-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .service-card .card-body {
+            padding: 20px;
             text-align: center;
         }
 
-        /* Remove border from the last button */
-        .service-buttons button:last-child {
-            border-right: none;
+        .service-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #333;
         }
 
-        /* Hover Effect */
-        .service-buttons button:hover {
+        .service-card p {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .service-card .btn-join {
+            background-color: #ff531f;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-transform: uppercase;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .service-card .btn-join:hover {
             background-color: #ff924a;
-        }
-
-        /* Active Button */
-        .service-buttons button.active {
-            background-color: #d41a1a; /* Highlight the active button */
         }
     </style>
 </head>
@@ -94,78 +115,57 @@
     <div class="container services-section">
         <h2 class="text-center mb-5">Our Services</h2>
 
-        <!-- Carousel -->
-        <div id="servicesSlider" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-inner">
-                <!-- Gym Slide -->
-                <div class="carousel-item active">
-                    <img src="{% static 'images/gym.jpg' %}" class="d-block w-100" alt="Gym">
-                    <div class="carousel-caption d-none d-md-block service-card">
-                        <h3>Gym</h3>
-                        <p>Get stronger and healthier with our fully equipped gym.</p>
-                        <a href="{% url 'book' %}?service=Gym&next={{ request.path }}" class="btn btn-join">Join Now</a>
-                    </div>
-                </div>
-
-                <!-- Martial Arts Slide -->
-                <div class="carousel-item">
-                    <img src="{% static 'images/martial-arts.jpg' %}" class="d-block w-100" alt="Martial Arts">
-                    <div class="carousel-caption d-none d-md-block service-card">
-                        <h3>Martial Arts</h3>
-                        <p>Master self-defense techniques and build discipline through martial arts.</p>
-                        <a href="{% url 'book' %}?service=Martial%20Arts&next={{ request.path }}" class="btn btn-join">Join Now</a>
-                    </div>
-                </div>
-
-                <!-- Yoga Slide -->
-                <div class="carousel-item">
-                    <img src="{% static 'images/yoga.jpg' %}" class="d-block w-100" alt="Yoga">
-                    <div class="carousel-caption d-none d-md-block service-card">
-                        <h3>Yoga</h3>
-                        <p>Relax, rejuvenate, and build flexibility with our calming yoga sessions.</p>
-                        <a href="{% url 'book' %}?service=Yoga&next={{ request.path }}" class="btn btn-join">Join Now</a>
-                    </div>
-                </div>
-
-                <!-- CrossFit Slide -->
-                <div class="carousel-item">
-                    <img src="{% static 'images/crossfit.jpg' %}" class="d-block w-100" alt="CrossFit">
-                    <div class="carousel-caption d-none d-md-block service-card">
-                        <h3>CrossFit</h3>
-                        <p>Push your limits with intense CrossFit training sessions.</p>
-                        <a href="{% url 'book' %}?service=CrossFit&next={{ request.path }}" class="btn btn-join">Join Now</a>
-                    </div>
-                </div>
-
-                <!-- Zumba Slide -->
-                <div class="carousel-item">
-                    <img src="{% static 'images/zumba.jpg' %}" class="d-block w-100" alt="Zumba">
-                    <div class="carousel-caption d-none d-md-block service-card">
-                        <h3>Zumba</h3>
-                        <p>Dance your way to fitness with high-energy Zumba classes.</p>
-                        <a href="{% url 'book' %}?service=Zumba&next={{ request.path }}" class="btn btn-join">Join Now</a>
-                    </div>
+        <!-- Horizontal Cards Container -->
+        <div class="services-container">
+            <!-- Gym Card -->
+            <div class="service-card">
+                <img src="{% static 'images/gym.jpg' %}" alt="Gym">
+                <div class="card-body">
+                    <h3>Gym</h3>
+                    <p>Get stronger and healthier with our fully equipped gym.</p>
+                    <a href="{% url 'book' %}?service=Gym&next={{ request.path }}" class="btn btn-join">Join Now</a>
                 </div>
             </div>
 
-            <!-- Carousel Controls -->
-            <button class="carousel-control-prev" type="button" data-bs-target="#servicesSlider" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#servicesSlider" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
-        </div>
+            <!-- Martial Arts Card -->
+            <div class="service-card">
+                <img src="{% static 'images/martial-arts.jpg' %}" alt="Martial Arts">
+                <div class="card-body">
+                    <h3>Martial Arts</h3>
+                    <p>Master self-defense techniques and build discipline through martial arts.</p>
+                    <a href="{% url 'book' %}?service=Martial%20Arts&next={{ request.path }}" class="btn btn-join">Join Now</a>
+                </div>
+            </div>
 
-        <!-- Custom Buttons for Carousel Navigation -->
-        <div class="service-buttons">
-            <button onclick="goToSlide(0)">Gym</button>
-            <button onclick="goToSlide(1)">Martial Arts</button>
-            <button onclick="goToSlide(2)">Yoga</button>
-            <button onclick="goToSlide(3)">CrossFit</button>
-            <button onclick="goToSlide(4)">Zumba</button>
+            <!-- Yoga Card -->
+            <div class="service-card">
+                <img src="{% static 'images/yoga.jpg' %}" alt="Yoga">
+                <div class="card-body">
+                    <h3>Yoga</h3>
+                    <p>Relax, rejuvenate, and build flexibility with our calming yoga sessions.</p>
+                    <a href="{% url 'book' %}?service=Yoga&next={{ request.path }}" class="btn btn-join">Join Now</a>
+                </div>
+            </div>
+
+            <!-- CrossFit Card -->
+            <div class="service-card">
+                <img src="{% static 'images/crossfit.jpg' %}" alt="CrossFit">
+                <div class="card-body">
+                    <h3>CrossFit</h3>
+                    <p>Push your limits with intense CrossFit training sessions.</p>
+                    <a href="{% url 'book' %}?service=CrossFit&next={{ request.path }}" class="btn btn-join">Join Now</a>
+                </div>
+            </div>
+
+            <!-- Zumba Card -->
+            <div class="service-card">
+                <img src="{% static 'images/zumba.jpg' %}" alt="Zumba">
+                <div class="card-body">
+                    <h3>Zumba</h3>
+                    <p>Dance your way to fitness with high-energy Zumba classes.</p>
+                    <a href="{% url 'book' %}?service=Zumba&next={{ request.path }}" class="btn btn-join">Join Now</a>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -175,20 +175,5 @@
 
     <!-- Bootstrap JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Initialize Carousel and Add Custom Navigation -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const myCarousel = new bootstrap.Carousel('#servicesSlider', {
-                interval: 5000,
-                wrap: true,
-                keyboard: true
-            });
-
-            // Function to navigate to a specific slide
-            window.goToSlide = function(slideIndex) {
-                myCarousel.to(slideIndex);  // Navigate to the specified slide
-            };
-        });
-    </script>
 </body>
 </html>

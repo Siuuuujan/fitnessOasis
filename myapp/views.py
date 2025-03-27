@@ -298,7 +298,7 @@ def get_users_with_similar_goals(current_user):
     current_goal = current_user.profile.fitness_goal
     return Profile.objects.filter(fitness_goal=current_goal).exclude(user=current_user)
 
-def get_recommended_services(current_user, limit=5):
+def get_recommended_services(current_user, limit=1):
     similar_users = get_users_with_similar_goals(current_user)
     similar_user_ids = [profile.user.id for profile in similar_users]
     
@@ -808,4 +808,3 @@ def delete_trainer(request, trainer_id):
     except Trainer.DoesNotExist:
         messages.error(request, "Trainer not found!")
     return redirect('fadmin')
-
