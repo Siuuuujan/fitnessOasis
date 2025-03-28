@@ -155,14 +155,13 @@ def book(request):
     service_name = request.GET.get('service')
     if service_name:
         try:
-            # Case-insensitive match for service name
+            # Case-insensitive match for service name with active trainers
             preselected_service = Service.objects.get(name__iexact=service_name)
-            # Get trainers for preselected service
-            trainers = Trainer.objects.filter(service=preselected_service)
+            # Get only active trainers for the service
+            trainers = Trainer.objects.filter(service=preselected_service, is_active=True)
         except Service.DoesNotExist:
             messages.warning(request, f"Service '{service_name}' not found")
 
-    # Package mapping remains the same
     package_mapping = {
         '1': 30, '3': 90, '6': 180, '12': 360
     }
@@ -173,16 +172,21 @@ def book(request):
             trainer_id = request.POST.get('trainer')
             package_value = request.POST.get('package')
             start_date = request.POST.get('start_date')
-            time_slot = request.POST.get('time_slot')  # Get selected time slot
+            time_slot = request.POST.get('time_slot')
+
+            # Validate trainer status
+            trainer = Trainer.objects.get(id=trainer_id)
+            if not trainer.is_active:
+                messages.error(request, "This trainer is no longer available for bookings")
+                return redirect('book')
 
             service = Service.objects.get(id=service_id)
-            trainer = Trainer.objects.get(id=trainer_id)
             duration = package_mapping.get(package_value, 30)
             start_date_obj = datetime.strptime(start_date, "%Y-%m-%d").date()
             end_date_obj = start_date_obj + timedelta(days=duration)
             price = trainer.daily_rate * duration
 
-            # Check if the time slot is already booked for the selected trainer and date range
+            # Check for conflicting bookings
             conflicting_bookings = Booking.objects.filter(
                 trainer=trainer,
                 start_date__lte=end_date_obj,
@@ -200,11 +204,11 @@ def book(request):
                 trainer=trainer,
                 start_date=start_date_obj,
                 end_date=end_date_obj,
-                time_slot=time_slot,  # Save the selected time slot
+                time_slot=time_slot,
                 price=price
             )
 
-            # Update the trainer's booked_time_slots
+            # Update trainer's booked slots
             current_date = start_date_obj
             while current_date <= end_date_obj:
                 trainer.booked_time_slots.append({
@@ -215,7 +219,6 @@ def book(request):
             trainer.save()
 
             messages.success(request, "Booking created successfully!")
-            # Fix: Redirect to confirm_order with the booking ID
             return redirect('confirm_order', booking_id=booking.id)
 
         except Exception as e:
@@ -687,10 +690,42 @@ def get_available_slots(request, trainer_id):
 def is_admin(user):
     return user.is_authenticated and (user.is_staff or user.is_superuser)
 
+from django.db.models import Sum, Count
+from django.utils import timezone
 @login_required(login_url='admin_login')
 @user_passes_test(is_admin, login_url='admin_login')
 def fadmin(request):
     if request.method == 'POST':
+        # Handle trainer activation/deactivation
+        if 'toggle_trainer' in request.POST:
+            trainer_id = request.POST.get('trainer_id')
+            try:
+                trainer = Trainer.objects.get(id=trainer_id)
+                
+                if trainer.is_active:
+                    # Check for upcoming paid bookings
+                    upcoming_bookings = Booking.objects.filter(
+                        trainer=trainer,
+                        end_date__gte=timezone.now().date(),
+                        paid=True
+                    ).exists()
+                    
+                    if upcoming_bookings:
+                        messages.warning(request, f"Cannot deactivate {trainer.name} - they have upcoming bookings!")
+                    else:
+                        trainer.is_active = False
+                        trainer.save()
+                        messages.success(request, f"{trainer.name} deactivated successfully")
+                else:
+                    trainer.is_active = True
+                    trainer.save()
+                    messages.success(request, f"{trainer.name} activated successfully")
+                        
+            except Trainer.DoesNotExist:
+                messages.error(request, "Trainer not found")
+            return redirect('fadmin')
+
+        # Handle adding new trainer
         if 'add_trainer' in request.POST:
             trainer_name = request.POST.get('trainer-name')
             service_id = request.POST.get('service')
@@ -698,81 +733,62 @@ def fadmin(request):
             daily_rate = request.POST.get('daily_rate')
             selected_time_slots = request.POST.getlist('time_slots')
 
-            if not trainer_name or not service_id or not experience or not daily_rate or not selected_time_slots:
+            if not all([trainer_name, service_id, experience, daily_rate, selected_time_slots]):
                 messages.error(request, "All fields are required!")
                 return redirect('fadmin')
 
             try:
                 service = Service.objects.get(id=service_id)
-                trainer = Trainer.objects.create(
+                Trainer.objects.create(
                     name=trainer_name,
                     service=service,
                     experience=experience,
                     daily_rate=daily_rate,
                     available_time_slots=selected_time_slots,
-                    booked_time_slots=[]  # Initialize as empty list
+                    is_active=True  # New trainers are active by default
                 )
                 messages.success(request, f"Trainer {trainer_name} added successfully!")
             except Service.DoesNotExist:
                 messages.error(request, "Selected service does not exist.")
             except Exception as e:
                 messages.error(request, f"Error: {str(e)}")
+            return redirect('fadmin')
 
+        # Handle adding new service
         elif 'add_service' in request.POST:
-            service_name = request.POST.get('service-name')
+            service_name = request.POST.get('service-name').strip()
             if not service_name:
                 messages.error(request, "Service name is required!")
-            elif Service.objects.filter(name=service_name).exists():
+            elif Service.objects.filter(name__iexact=service_name).exists():
                 messages.error(request, "Service already exists!")
             else:
                 Service.objects.create(name=service_name)
                 messages.success(request, f"Service '{service_name}' added successfully!")
+            return redirect('fadmin')
 
-        return redirect('fadmin')
-
-    # Calculate revenue, bookings, and average per booking for each service
+    # Calculate service revenue data
     service_data = Booking.objects.filter(paid=True).values('service__name').annotate(
         total_revenue=Sum('price'),
         total_bookings=Count('id'),
         average_per_booking=Sum('price') / Count('id')
     )
 
-    # Prepare data for each service
-    service_revenue_data = {service['service__name']: service for service in service_data}
+    # Prepare context data
+    context = {
+        'services': Service.objects.all(),
+        'trainers': Trainer.objects.all(),
+        'available_trainers': Trainer.objects.count(),
+        'total_bookings': Booking.objects.count(),
+        'paid_bookings': Booking.objects.filter(paid=True),
+        'total_revenue': Booking.objects.filter(paid=True).aggregate(Sum('price'))['price__sum'] or 0,
+        'slots_per_month': Booking.objects.filter(start_date__gte=timezone.now().replace(day=1)).count(),
+        'slots_per_week': Booking.objects.filter(start_date__gte=timezone.now() - timezone.timedelta(days=timezone.now().weekday())).count(),
+        'total_members': User.objects.count(),
+        'contact_messages': Contact.objects.all().order_by('-created_at'),
+        'service_revenue_data': {service['service__name']: service for service in service_data},
+    }
 
-    # Fetch data for the dashboard
-    services = Service.objects.all()
-    trainers = Trainer.objects.all()
-    available_trainers = Trainer.objects.count()
-    total_bookings = Booking.objects.count()
-    paid_bookings = Booking.objects.filter(paid=True)
-    total_revenue = paid_bookings.aggregate(Sum('price'))['price__sum'] or 0
-    
-    # Calculate slots
-    now = datetime.now()
-    start_of_month = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-    start_of_week = now - timedelta(days=now.weekday())
-    
-    slots_per_month = Booking.objects.filter(start_date__gte=start_of_month).count()
-    slots_per_week = Booking.objects.filter(start_date__gte=start_of_week).count()
-    
-    total_members = User.objects.count()
-    contact_messages = Contact.objects.all().order_by('-created_at')
-
-    return render(request, 'fadmin.html', {
-        'services': services,
-        'trainers': trainers,
-        'available_trainers': available_trainers,
-        'total_bookings': total_bookings,
-        'paid_bookings': paid_bookings,
-        'total_revenue': total_revenue,
-        'slots_per_month': slots_per_month,
-        'slots_per_week': slots_per_week,
-        'total_members': total_members,
-        'contact_messages': contact_messages,
-        'service_revenue_data': service_revenue_data,  # Pass the calculated revenue data
-    })
-
+    return render(request, 'fadmin.html', context)
 
 @never_cache
 def admin_login(request):

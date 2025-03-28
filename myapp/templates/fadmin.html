@@ -68,10 +68,13 @@
                                             {% endif %}
                                         </td>
                                         <td>
-                                            <form action="{% url 'delete_trainer' trainer.id %}" method="POST">
+                                            <form method="POST">
                                                 {% csrf_token %}
-                                                <button type="submit" class="deactivate-btn" 
-                                                        onclick="return confirm('Are you sure you want to deactivate this trainer?')">
+                                                <input type="hidden" name="toggle_trainer" value="1">
+                                                <input type="hidden" name="trainer_id" value="{{ trainer.id }}">
+                                                <button type="submit" 
+                                                        class="status-btn {% if trainer.is_active %}deactivate{% else %}activate{% endif %}"
+                                                        onclick="return confirm('Are you sure you want to {% if trainer.is_active %}deactivate{% else %}activate{% endif %} {{ trainer.name }}?')">
                                                     {% if trainer.is_active %}Deactivate{% else %}Activate{% endif %}
                                                 </button>
                                             </form>
